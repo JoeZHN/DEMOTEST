@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://djyjg2uovxf4a"]
+
+[ext_resource type="Script" uid="uid://cc3gkhkjw3uw" path="res://scripts/ui/main_menu.gd" id="1_sl1te"]
+[ext_resource type="Texture2D" uid="uid://qitd2uj5u330" path="res://resources/talas.webp" id="2_fe2o3"]
+[ext_resource type="AudioStream" uid="uid://1ubq37wsdbjf" path="res://resources/路南 - 关山月_H.ogg" id="3_1g8jr"]
+
+[node name="MainMenu" type="Node2D" unique_id=1694972602]
+script = ExtResource("1_sl1te")
+
+[node name="Talas" type="Sprite2D" parent="." unique_id=422812232]
+position = Vector2(592, 392.00003)
+scale = Vector2(0.85371023, 0.8359375)
+texture = ExtResource("2_fe2o3")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1593580154]
+offset_left = -126.0
+offset_top = 5.0
+offset_right = -34.0
+offset_bottom = 45.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=962594108]
+offset_left = 484.0
+offset_top = 11.0
+offset_right = 701.0
+offset_bottom = 417.0
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=1279500850]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5294118, 0, 0, 1)
+theme_override_font_sizes/font_size = 150
+horizontal_alignment = 1
+
+[node name="StartButton" type="Button" parent="VBoxContainer" unique_id=136675335]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "开始游戏"
+
+[node name="BattleTestButton" type="Button" parent="VBoxContainer" unique_id=1368232516]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "测试战斗"
+
+[node name="QuitButton" type="Button" parent="VBoxContainer" unique_id=1754897406]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "退出游戏"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=956927061]
+stream = ExtResource("3_1g8jr")
+autoplay = true

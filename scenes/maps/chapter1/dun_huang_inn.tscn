@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://buglvk6ord6sw"]
+
+[ext_resource type="Texture2D" uid="uid://ci21yoax4mlei" path="res://icon.svg" id="1_0tac5"]
+[ext_resource type="Script" uid="uid://bgpt2k22y2oo6" path="res://scripts/maps/chapter1/dun_huang_inn.gd" id="1_w1bge"]
+[ext_resource type="PackedScene" uid="uid://bwdiwgpuwhy41" path="res://scenes/ui/dialogue_box.tscn" id="3_u15de"]
+
+[node name="DunhuangInn" type="Node2D" unique_id=834091584]
+script = ExtResource("1_w1bge")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=937525535]
+position = Vector2(598, 189)
+scale = Vector2(3.7187502, 1.6796875)
+texture = ExtResource("1_0tac5")
+
+[node name="DialogueBox" parent="." unique_id=675419220 instance=ExtResource("3_u15de")]

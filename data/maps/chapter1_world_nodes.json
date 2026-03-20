@@ -1,0 +1,26 @@
+{
+  "start_node": "dunhuang",
+  "nodes": [
+	{
+	  "id": "dunhuang",
+	  "name": "敦煌客栈",
+	  "position": [200, 260],
+	  "scene_path": "res://scenes/maps/chapter1/dun_huang_inn.tscn",
+	  "unlocked": true
+	},
+	{
+	  "id": "merchant_road",
+	  "name": "商路荒地",
+	  "position": [420, 280],
+	  "scene_path": "res://scenes/maps/chapter1/merchant_road.tscn",
+	  "unlocked": false
+	},
+	{
+	  "id": "frontier_camp",
+	  "name": "边疆军镇",
+	  "position": [680, 220],
+	  "scene_path": "res://scenes/maps/chapter1/frontier_camp.tscn",
+	  "unlocked": false
+	}
+  ]
+}

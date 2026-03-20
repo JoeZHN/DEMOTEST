@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://bh0mb58i6ahfh"]
+
+[ext_resource type="Script" uid="uid://cwi2ghottgbbf" path="res://scripts/world/world_node.gd" id="1_v5k0o"]
+[ext_resource type="Texture2D" uid="uid://ci21yoax4mlei" path="res://icon.svg" id="2_gbsu8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8g26h"]
+
+[node name="WorldNode" type="Area2D" unique_id=291360915]
+script = ExtResource("1_v5k0o")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=945013257]
+position = Vector2(254.99998, 160)
+scale = Vector2(0.4101565, 0.30078128)
+texture = ExtResource("2_gbsu8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1933439843]
+position = Vector2(255, 160)
+shape = SubResource("CircleShape2D_8g26h")
+
+[node name="Label" type="Label" parent="." unique_id=241095699]
+offset_left = 212.0
+offset_top = 106.0
+offset_right = 308.0
+offset_bottom = 140.0
+theme_override_colors/font_color = Color(0.9372549, 0.73333335, 0.3882353, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 24
+text = "地点名称"

@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://1ubq37wsdbjf"
+path="res://.godot/imported/路南 - 关山月_H.ogg-1c30a8a46c12125f38b9735f7d22c3c0.oggvorbisstr"
+
+[deps]
+
+source_file="res://resources/路南 - 关山月_H.ogg"
+dest_files=["res://.godot/imported/路南 - 关山月_H.ogg-1c30a8a46c12125f38b9735f7d22c3c0.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
