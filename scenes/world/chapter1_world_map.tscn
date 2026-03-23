@@ -1,18 +1,17 @@
 [gd_scene format=3 uid="uid://l8uid8a5we77"]
 
-[ext_resource type="Script" uid="uid://n6kyxu333q4" path="res://scripts/world/world_map.gd" id="1_vik6b"]
-[ext_resource type="Texture2D" uid="uid://bnc0buwfe7lbp" path="res://resources/Gemini_Generated_Image_8pj8zx8pj8zx8pj8.png" id="2_yvca6"]
-[ext_resource type="AudioStream" uid="uid://gq6l57qh7gjb" path="res://resources/川井宪次 - 一代宗师_H.ogg" id="3_j8g5j"]
+[ext_resource type="Script" uid="uid://n6kyxu333q4" path="res://scripts/world/world_map.gd" id="1_frvln"]
+[ext_resource type="Texture2D" uid="uid://bnc0buwfe7lbp" path="res://resources/Gemini_Generated_Image_8pj8zx8pj8zx8pj8.png" id="2_1lsy3"]
 
 [node name="Chapter1WorldMap" type="Node2D" unique_id=1118923687]
-script = ExtResource("1_vik6b")
+script = ExtResource("1_frvln")
 
 [node name="Background" type="Node2D" parent="." unique_id=991633399]
 
 [node name="GeminiGeneratedImage8Pj8Zx8Pj8Zx8Pj8" type="Sprite2D" parent="Background" unique_id=1727111980]
 position = Vector2(1227, 151.00002)
 scale = Vector2(1.8011364, 1.6835938)
-texture = ExtResource("2_yvca6")
+texture = ExtResource("2_1lsy3")
 
 [node name="Connections" type="Node2D" parent="." unique_id=525359519]
 
@@ -40,7 +39,3 @@ text = "点击节点前往地点"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2027251787]
 position = Vector2(576, 323)
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=927200158]
-stream = ExtResource("3_j8g5j")
-autoplay = true

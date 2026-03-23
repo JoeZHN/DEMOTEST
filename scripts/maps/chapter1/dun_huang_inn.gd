@@ -11,3 +11,8 @@ func _ready() -> void:
 
 func _on_dialogue_finished() -> void:
 	print("敦煌客栈对话结束")
+
+	GameState.set_flag("dunhuang_intro_finished", true)
+	GameState.unlock_node("merchant_road")
+
+	NodeTravel.go_to_scene("res://scenes/world/chapter1_world_map.tscn")

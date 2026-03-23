@@ -11,9 +11,10 @@ var map_data: Dictionary = {}
 var spawned_nodes: Dictionary = {}
 
 func _ready() -> void:
-	#title_label.text = "第一章地图"
-	#hint_label.text = "点击节点前往地点"
+	title_label.text = "第一章地图"
+	hint_label.text = "点击节点前往地点"
 	_load_map_data()
+	_apply_game_state_to_map_data()
 	_spawn_nodes()
 
 func _load_map_data() -> void:
@@ -52,3 +53,11 @@ func _on_node_selected(node_id: String, scene_path: String) -> void:
 func unlock_node(node_id: String) -> void:
 	if spawned_nodes.has(node_id):
 		spawned_nodes[node_id].set_unlocked(true)
+		
+func _apply_game_state_to_map_data() -> void:
+	if not map_data.has("nodes"):
+		return
+
+	for node_data in map_data["nodes"]:
+		var node_id := str(node_data.get("id", ""))
+		node_data["unlocked"] = GameState.is_node_unlocked(node_id)

@@ -1,3 +1,28 @@
 [gd_scene format=3 uid="uid://ba3t5ptw23rmu"]
 
 [node name="MerchantRoad" type="Node2D" unique_id=865907696]
+
+[node name="Background" type="Node2D" parent="." unique_id=1414525452]
+
+[node name="GroundLayer" type="TileMapLayer" parent="." unique_id=647676208]
+
+[node name="BlockLayer" type="TileMapLayer" parent="." unique_id=198356367]
+
+[node name="Markers" type="Node2D" parent="." unique_id=1976042034]
+
+[node name="PlayerSpawn" type="Marker2D" parent="Markers" unique_id=1037607866]
+
+[node name="LiQianSpawn" type="Marker2D" parent="Markers" unique_id=2147152328]
+
+[node name="MerchantSpawn" type="Marker2D" parent="Markers" unique_id=227210235]
+
+[node name="ItemSpawn" type="Marker2D" parent="Markers" unique_id=1060816292]
+
+[node name="Characters" type="Node2D" parent="." unique_id=970085966]
+
+[node name="Items" type="Node2D" parent="." unique_id=549268037]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=296591811]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=119420486]
+position = Vector2(575, 318)

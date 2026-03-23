@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/川井宪次 - 一代宗师_H.ogg-c0327d9828a
 [params]
 
 loop=false
-loop_offset=0
-bpm=0
+loop_offset=0.0
+bpm=0.0
 beat_count=0
 bar_beats=4

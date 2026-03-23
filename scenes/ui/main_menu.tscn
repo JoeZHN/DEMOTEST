@@ -45,6 +45,6 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "退出游戏"
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=956927061]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1360305021]
 stream = ExtResource("3_1g8jr")
 autoplay = true

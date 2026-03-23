@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ctr4t6i3q2k12"
+path="res://.godot/imported/enter.wav-659a5636b4083c9f86847345c81967c0.sample"
+
+[deps]
+
+source_file="res://resources/TOPDOWNrpg/Meta data assets files/sounds/fx/enter.wav"
+dest_files=["res://.godot/imported/enter.wav-659a5636b4083c9f86847345c81967c0.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
