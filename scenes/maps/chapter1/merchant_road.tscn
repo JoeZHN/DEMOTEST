@@ -15,6 +15,8 @@
 [ext_resource type="Texture2D" uid="uid://cbgkdojwds5op" path="res://resources/TOPDOWNrpg/desert tileset/decor_dead_bush4.png" id="12_jycxw"]
 [ext_resource type="Texture2D" uid="uid://4gvw68uyhxg6" path="res://resources/TOPDOWNrpg/desert tileset/decor_cactus5_pink.png" id="13_c8bff"]
 [ext_resource type="PackedScene" uid="uid://b7d58kg72lh4f" path="res://scenes/characters/hu_chao_map_actor.tscn" id="14_yjkum"]
+[ext_resource type="PackedScene" uid="uid://cwp6u0wjvsfgb" path="res://scenes/interactables/pickup_item.tscn" id="16_5tprn"]
+[ext_resource type="Script" uid="uid://myvowl32h5c7" path="res://scripts/ui/interaction_prompt.gd" id="17_syyml"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_36uk4"]
 texture = ExtResource("1_qvdpt")
@@ -272,7 +274,29 @@ position = Vector2(41, 30)
 [node name="Items" type="Node2D" parent="." unique_id=549268037]
 position = Vector2(9, 7)
 
+[node name="SwordPickup" parent="Items" unique_id=1121979203 instance=ExtResource("16_5tprn")]
+position = Vector2(572, 386)
+
 [node name="UI" type="CanvasLayer" parent="." unique_id=296591811]
+
+[node name="InteractionPrompt" type="Label" parent="UI" unique_id=337256490]
+visible = false
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -546.0
+offset_top = -25.0
+offset_right = -480.0
+offset_bottom = 9.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 24
+text = "按 E "
+horizontal_alignment = 1
+script = ExtResource("17_syyml")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=119420486]
 position = Vector2(604, 338)
