@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var prompt_text: String = "按 E 拾取"
+@export var prompt_text: String = "E"
 @export var item_name: String = "剑"
 
 var can_interact: bool = false
