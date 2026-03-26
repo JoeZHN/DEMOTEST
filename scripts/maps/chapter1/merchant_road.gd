@@ -8,9 +8,12 @@ extends Node2D
 @onready var camera: Camera2D = $Camera2D
 @onready var interaction_prompt: Label = $UI/InteractionPrompt
 
+
 var dialogue_box: DialogueBox
 var is_dialogue_running: bool = false
 var current_interactable: InteractableArea2D = null
+var current_dialogue_path: String = ""
+
 
 func _ready() -> void:
 	await get_tree().process_frame
@@ -68,11 +71,27 @@ func _after_interaction(interactable: InteractableArea2D) -> void:
 func _start_li_qian_dialogue() -> void:
 	is_dialogue_running = true
 	interaction_prompt.hide_prompt()
-
-	var lines := DialogueManager.load_dialogue("res://data/dialogues/chapter1/li_qian_intro.json")
-	dialogue_box.start_dialogue(lines)
-
 	hu_chao.can_move = false
+
+	current_dialogue_path = _get_li_qian_dialogue_path()
+	var lines := DialogueManager.load_dialogue(current_dialogue_path)
+	dialogue_box.start_dialogue(lines)
+	
+func _get_li_qian_dialogue_path() -> String:
+	if GameState.merchant_road_stage == 0:
+		GameState.merchant_road_stage = 1
+		return "res://data/dialogues/chapter1/li_qian_intro.json"
+
+	if GameState.merchant_road_stage == 1:
+		return "res://data/dialogues/chapter1/li_qian_intro.json"
+
+	if GameState.merchant_road_stage == 2:
+		return "res://data/dialogues/chapter1/li_qian_after_sword.json"
+
+	return "res://data/dialogues/chapter1/li_qian_after_sword.json"
+	GameState.merchant_road_stage = 1
+	print("merchant_road_stage = ", GameState.merchant_road_stage)
+	print("inventory = ", GameState.inventory)
 
 func _on_dialogue_finished() -> void:
 	is_dialogue_running = false
@@ -80,3 +99,10 @@ func _on_dialogue_finished() -> void:
 
 	if current_interactable != null:
 		interaction_prompt.show_prompt(current_interactable.prompt_text)
+	if current_dialogue_path == "res://data/dialogues/chapter1/li_qian_after_sword.json":
+		if GameState.merchant_road_stage < 3:
+			GameState.merchant_road_stage = 3
+			
+	GameState.merchant_road_stage = 3
+	print("merchant_road_stage = ", GameState.merchant_road_stage)
+	print("inventory = ", GameState.inventory)

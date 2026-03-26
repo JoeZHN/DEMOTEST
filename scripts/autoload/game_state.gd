@@ -9,6 +9,19 @@ var chapter1_node_unlocks: Dictionary = {
 var chapter1_flags: Dictionary = {
 	"dunhuang_intro_finished": false
 }
+var inventory: Array[String] = []
+var merchant_road_stage: int = 0
+
+func add_item(item_id: String) -> void:
+	if item_id in inventory:
+		return
+	inventory.append(item_id)
+
+func has_item(item_id: String) -> bool:
+	return item_id in inventory
+
+func remove_item(item_id: String) -> void:
+	inventory.erase(item_id)
 
 func unlock_node(node_id: String) -> void:
 	chapter1_node_unlocks[node_id] = true

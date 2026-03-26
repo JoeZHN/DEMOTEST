@@ -4,24 +4,24 @@
 [ext_resource type="Script" uid="uid://bvnn0ke5gj7gj" path="res://scripts/characters/li_qian_map_actor.gd" id="1_qcw55"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qcw55"]
-radius = 15.0
+radius = 22.090721
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qcw55"]
+size = Vector2(26, 34)
 
 [node name="LiQianMapActor" type="Area2D" unique_id=1684753940]
 script = ExtResource("1_qcw55")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1381845518]
-position = Vector2(1.1920929e-07, 1)
-scale = Vector2(1.25, 1.25)
+position = Vector2(4.7683716e-07, 0)
+scale = Vector2(2.1874998, 2.4375)
 texture = ExtResource("1_5hm88")
 
 [node name="InteractionShape" type="CollisionShape2D" parent="." unique_id=1589419864]
-position = Vector2(0, 2)
+position = Vector2(0, 1)
 shape = SubResource("CircleShape2D_qcw55")
 
 [node name="BlockBody" type="StaticBody2D" parent="." unique_id=1368108955]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BlockBody" unique_id=1414295441]
-position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_qcw55")
