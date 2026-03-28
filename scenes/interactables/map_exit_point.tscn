@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bvgey442v4xya"]
+
+[ext_resource type="Script" uid="uid://co38gygvr1x5v" path="res://scripts/interactables/map_exit_point.gd" id="1_5pcs4"]
+[ext_resource type="Texture2D" uid="uid://ci21yoax4mlei" path="res://icon.svg" id="1_qnfpd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5pcs4"]
+size = Vector2(31, 32)
+
+[node name="MapExitPoint" type="Area2D" unique_id=965250200]
+script = ExtResource("1_5pcs4")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1131416790]
+position = Vector2(-9.536743e-07, 0)
+scale = Vector2(0.22265615, 0.23437522)
+texture = ExtResource("1_qnfpd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1392900853]
+shape = SubResource("RectangleShape2D_5pcs4")

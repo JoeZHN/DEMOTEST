@@ -9,6 +9,8 @@ extends Node2D
 @onready var interaction_prompt: Label = $UI/InteractionPrompt
 @onready var objective_complete_label: Label = $UI/ObjectiveCompleteLabel
 @onready var next_step_label: Label = $UI/NextStepLabel
+@onready var exit_spawn: Marker2D = $Markers/ExitSpawn
+@onready var map_exit_point: InteractableArea2D = $Interactables/MapExitPoint
 
 
 var dialogue_box: DialogueBox
@@ -24,6 +26,7 @@ func _ready() -> void:
 
 	hu_chao.global_position = player_spawn.global_position
 	li_qian.global_position = li_qian_spawn.global_position
+	map_exit_point.global_position = exit_spawn.global_position
 
 	camera.reparent(hu_chao)
 	camera.position = Vector2.ZERO
@@ -37,6 +40,8 @@ func _ready() -> void:
 	li_qian.interaction_exited.connect(_on_interactable_exited)
 	sword_pickup.interaction_entered.connect(_on_interactable_entered)
 	sword_pickup.interaction_exited.connect(_on_interactable_exited)
+	map_exit_point.interaction_entered.connect(_on_interactable_entered)
+	map_exit_point.interaction_exited.connect(_on_interactable_exited)
 
 	dialogue_box = preload("res://scenes/ui/dialogue_box.tscn").instantiate()
 	add_child(dialogue_box)
