@@ -301,6 +301,24 @@ text = "按 E "
 horizontal_alignment = 1
 script = ExtResource("17_syyml")
 
+[node name="ObjectiveCompleteLabel" type="Label" parent="UI" unique_id=1080743079]
+offset_left = 497.0
+offset_top = 128.0
+offset_right = 665.0
+offset_bottom = 168.0
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 20
+text = "商路阶段完成"
+
+[node name="NextStepLabel" type="Label" parent="UI" unique_id=213534906]
+offset_left = 393.0
+offset_top = 156.0
+offset_right = 777.0
+offset_bottom = 201.0
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 32
+text = "继续前进，后续内容待接入"
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=119420486]
 position = Vector2(604, 338)
 scale = Vector2(1, 1.12)

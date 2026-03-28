@@ -7,12 +7,16 @@ extends Node2D
 @onready var sword_pickup: InteractableArea2D = $Items/SwordPickup
 @onready var camera: Camera2D = $Camera2D
 @onready var interaction_prompt: Label = $UI/InteractionPrompt
+@onready var objective_complete_label: Label = $UI/ObjectiveCompleteLabel
+@onready var next_step_label: Label = $UI/NextStepLabel
 
 
 var dialogue_box: DialogueBox
 var is_dialogue_running: bool = false
 var current_interactable: InteractableArea2D = null
 var current_dialogue_path: String = ""
+var has_shown_stage_complete_feedback: bool = false
+
 
 
 func _ready() -> void:
@@ -26,6 +30,8 @@ func _ready() -> void:
 	camera.make_current()
 
 	interaction_prompt.hide_prompt()
+	objective_complete_label.visible = false
+	next_step_label.visible = false
 
 	li_qian.interaction_entered.connect(_on_interactable_entered)
 	li_qian.interaction_exited.connect(_on_interactable_exited)
@@ -89,9 +95,7 @@ func _get_li_qian_dialogue_path() -> String:
 		return "res://data/dialogues/chapter1/li_qian_after_sword.json"
 
 	return "res://data/dialogues/chapter1/li_qian_after_sword.json"
-	GameState.merchant_road_stage = 1
-	print("merchant_road_stage = ", GameState.merchant_road_stage)
-	print("inventory = ", GameState.inventory)
+
 
 func _on_dialogue_finished() -> void:
 	is_dialogue_running = false
@@ -99,10 +103,25 @@ func _on_dialogue_finished() -> void:
 
 	if current_interactable != null:
 		interaction_prompt.show_prompt(current_interactable.prompt_text)
+
 	if current_dialogue_path == "res://data/dialogues/chapter1/li_qian_after_sword.json":
 		if GameState.merchant_road_stage < 3:
 			GameState.merchant_road_stage = 3
+
+		_show_stage_complete_feedback()
 			
-	GameState.merchant_road_stage = 3
-	print("merchant_road_stage = ", GameState.merchant_road_stage)
-	print("inventory = ", GameState.inventory)
+func _show_stage_complete_feedback() -> void:
+	if has_shown_stage_complete_feedback:
+		return
+
+	if GameState.merchant_road_stage < 3:
+		return
+
+	has_shown_stage_complete_feedback = true
+	objective_complete_label.visible = true
+	next_step_label.visible = true
+
+	await get_tree().create_timer(3.0).timeout
+	objective_complete_label.visible = false
+	next_step_label.visible = false
+			

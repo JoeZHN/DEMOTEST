@@ -15,6 +15,3 @@ func interact() -> void:
 
 	queue_free()
 	
-	GameState.merchant_road_stage = 2
-	print("merchant_road_stage = ", GameState.merchant_road_stage)
-	print("inventory = ", GameState.inventory)
