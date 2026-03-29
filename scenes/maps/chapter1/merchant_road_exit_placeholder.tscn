@@ -38,3 +38,7 @@ horizontal_alignment = 1
 [node name="BackButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=545143840]
 layout_mode = 2
 text = "返回商路测试"
+
+[node name="ContinueButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=320423322]
+layout_mode = 2
+text = "进入下一阶段"
