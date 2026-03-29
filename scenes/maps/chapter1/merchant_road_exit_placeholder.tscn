@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://baedoihfyv0dp"]
+
+[ext_resource type="Script" uid="uid://3md6n7bbtjpi" path="res://scripts/maps/chapter1/merchant_road_exit_placeholder.gd" id="1_4w1uf"]
+
+[node name="MerchantRoadExitPlaceholder" type="Control" unique_id=1379290403]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_4w1uf")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1804507270]
+layout_mode = 0
+offset_left = 503.0
+offset_top = 232.0
+offset_right = 722.0
+offset_bottom = 370.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=400666468]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=2057250855]
+layout_mode = 2
+text = "已离开商路"
+horizontal_alignment = 1
+
+[node name="DescriptionLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=2118590960]
+layout_mode = 2
+text = "你已完成商路阶段的当前目标。
+下一阶段地图待接入。"
+horizontal_alignment = 1
+
+[node name="StageInfoLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1337013106]
+layout_mode = 2
+text = "阶段信息加载中..."
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=545143840]
+layout_mode = 2
+text = "返回商路测试"

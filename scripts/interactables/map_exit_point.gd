@@ -14,4 +14,4 @@ func interact() -> void:
 		print("还不能离开商路，先完成当前目标。")
 		return
 
-	print("商路出口已开启，下一阶段地图待接入。")
+	get_tree().change_scene_to_file("res://scenes/maps/chapter1/merchant_road_exit_placeholder.tscn")
