@@ -52,8 +52,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("interact") and current_interactable != null:
-		_handle_interaction(current_interactable)
 		get_viewport().set_input_as_handled()
+		_handle_interaction(current_interactable)
 
 func _on_interactable_entered(interactable: InteractableArea2D) -> void:
 	if is_dialogue_running:
