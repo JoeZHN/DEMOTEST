@@ -20,7 +20,6 @@ var current_dialogue_path: String = ""
 var has_shown_stage_complete_feedback: bool = false
 
 
-
 func _ready() -> void:
 	await get_tree().process_frame
 
