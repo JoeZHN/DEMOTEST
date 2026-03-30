@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dbknn2a7aesbr"]
+
+[ext_resource type="Texture2D" uid="uid://dbog35rt4k7s0" path="res://resources/TOPDOWNrpg/Meta data assets files/Visuals/CHARACTERS/npc/Sage/1.png" id="1_blh66"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_05hrg"]
+radius = 19.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u2os5"]
+size = Vector2(27, 32)
+
+[node name="FrontierScoutMapActor" type="Area2D" unique_id=1741598075]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1969270740]
+position = Vector2(2.3841858e-07, 0)
+scale = Vector2(1.5, 1.8125)
+texture = ExtResource("1_blh66")
+
+[node name="InteractionShape" type="CollisionShape2D" parent="." unique_id=1330353058]
+position = Vector2(0, -1)
+shape = SubResource("CircleShape2D_05hrg")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1369390913]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=2087394687]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_u2os5")

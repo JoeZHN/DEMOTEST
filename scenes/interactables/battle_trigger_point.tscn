@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bw6xvb01wnr84"]
+
+[ext_resource type="Script" uid="uid://dx02n4q4lf0n3" path="res://scripts/interactables/battle_trigger_point.gd" id="1_s30xm"]
+[ext_resource type="Texture2D" uid="uid://ci21yoax4mlei" path="res://icon.svg" id="2_f7mq8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5pnu1"]
+size = Vector2(53, 49)
+
+[node name="BattleTriggerPoint" type="Area2D" unique_id=1187851213]
+script = ExtResource("1_s30xm")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1524953028]
+position = Vector2(-4.7683716e-07, 0)
+scale = Vector2(0.4296875, 0.390625)
+texture = ExtResource("2_f7mq8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2091976984]
+shape = SubResource("RectangleShape2D_5pnu1")

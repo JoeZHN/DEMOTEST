@@ -1,0 +1,1 @@
+extends InteractableArea2D

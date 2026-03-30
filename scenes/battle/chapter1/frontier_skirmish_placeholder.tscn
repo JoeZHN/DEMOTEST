@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://b5hsi0006bava"]
+
+[ext_resource type="Script" uid="uid://dw5n4f0fdq6rh" path="res://scripts/battle/chapter1/frontier_skirmish_placeholder.gd" id="1_d3ksh"]
+
+[node name="FrontierSkirmishPlaceholder" type="Node2D" unique_id=288298422]
+script = ExtResource("1_d3ksh")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1370441154]
+offset_left = 452.0
+offset_top = 236.0
+offset_right = 663.0
+offset_bottom = 348.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1022184975]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1692894504]
+layout_mode = 2
+text = "已进入战斗"
+horizontal_alignment = 1
+
+[node name="DescriptionLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=579937851]
+layout_mode = 2
+text = "这里将接入第一场正式战斗"
+horizontal_alignment = 1
+
+[node name="StageInfoLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=356999597]
+layout_mode = 2
+text = "显示 frontier_outpost_stage"
+
+[node name="EndBattleButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=824202191]
+layout_mode = 2
+text = "结束战斗测试"

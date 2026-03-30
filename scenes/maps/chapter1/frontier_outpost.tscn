@@ -1,8 +1,11 @@
 [gd_scene format=4 uid="uid://bjmdjdrmvjgtn"]
 
 [ext_resource type="Texture2D" uid="uid://bdu4vtl35l8pj" path="res://resources/TOPDOWNrpg/desert tileset/sandstone_3x3.png" id="1_5ptrp"]
+[ext_resource type="Script" uid="uid://y76w7iyl42l1" path="res://scenes/maps/chapter1/frontier_outpost.gd" id="1_od83l"]
 [ext_resource type="PackedScene" uid="uid://b7d58kg72lh4f" path="res://scenes/characters/hu_chao_map_actor.tscn" id="2_pi065"]
-[ext_resource type="Script" uid="uid://brlmtia3nwroc" path="res://scripts/interactables/interactable_area_2d.gd" id="3_b7a33"]
+[ext_resource type="PackedScene" uid="uid://dbknn2a7aesbr" path="res://scenes/characters/frontier_scout_map_actor.tscn" id="4_do0ms"]
+[ext_resource type="Script" uid="uid://b4pnhy37ow22w" path="res://scripts/characters/frontier_scout_map_actor.gd" id="5_rlv5u"]
+[ext_resource type="PackedScene" uid="uid://bw6xvb01wnr84" path="res://scenes/interactables/battle_trigger_point.tscn" id="6_1j8rg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_od83l"]
 texture = ExtResource("1_5ptrp")
@@ -38,6 +41,7 @@ texture = ExtResource("1_5ptrp")
 sources/0 = SubResource("TileSetAtlasSource_od83l")
 
 [node name="FrontierOutpost" type="Node2D" unique_id=763074619]
+script = ExtResource("1_od83l")
 
 [node name="Background" type="Node2D" parent="." unique_id=1529142618]
 
@@ -50,18 +54,15 @@ tile_set = SubResource("TileSet_do0ms")
 [node name="Characters" type="Node2D" parent="." unique_id=1088566705]
 position = Vector2(15, 4)
 
-[node name="FrontierScout" type="CharacterBody2D" parent="Characters" unique_id=908357759]
-position = Vector2(36, 56)
-
 [node name="HuChao" parent="Characters" unique_id=427391446 instance=ExtResource("2_pi065")]
+
+[node name="FrontierScoutMapActor" parent="Characters" unique_id=1741598075 instance=ExtResource("4_do0ms")]
+script = ExtResource("5_rlv5u")
 
 [node name="Interactables" type="Node2D" parent="." unique_id=1744759917]
 position = Vector2(9, 6)
 
-[node name="BattleTriggerPoint" type="Area2D" parent="Interactables" unique_id=509657678]
-position = Vector2(13, 22)
-script = ExtResource("3_b7a33")
-metadata/_custom_type_script = "uid://brlmtia3nwroc"
+[node name="BattleTriggerPoint" parent="Interactables" unique_id=1187851213 instance=ExtResource("6_1j8rg")]
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1552462747]
 
