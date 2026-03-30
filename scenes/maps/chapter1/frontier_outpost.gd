@@ -27,7 +27,7 @@ func _ready() -> void:
 	camera.position = Vector2.ZERO
 	camera.make_current()
 
-	interaction_prompt.hide_prompt()
+	interaction_prompt.visible = false
 
 	if not GameState.has_variable("frontier_outpost_stage"):
 		GameState.frontier_outpost_stage = 0
