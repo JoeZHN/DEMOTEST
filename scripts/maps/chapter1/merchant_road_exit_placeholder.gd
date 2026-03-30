@@ -7,8 +7,8 @@ extends Control
 @onready var back_button: Button = $CenterContainer/VBoxContainer/BackButton
 
 func _ready() -> void:
-	title_label.text = "已离开商路"
-	description_label.text = "你已完成商路阶段的当前目标。\n前方的前哨区域似乎出现了新的情况。"
+	title_label.text = "Merchant Road Complete"
+	description_label.text = "Current stage is complete. You can continue to the next map."
 	stage_info_label.text = "merchant_road_stage = %s\ninventory = %s" % [GameState.merchant_road_stage, str(GameState.inventory)]
 
 	continue_button.pressed.connect(_on_continue_button_pressed)

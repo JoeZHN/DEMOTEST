@@ -16,18 +16,18 @@ layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1692894504]
 layout_mode = 2
-text = "已进入战斗"
+text = "Battle Started"
 horizontal_alignment = 1
 
 [node name="DescriptionLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=579937851]
 layout_mode = 2
-text = "这里将接入第一场正式战斗"
+text = "Chapter 1 placeholder battle"
 horizontal_alignment = 1
 
 [node name="StageInfoLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=356999597]
 layout_mode = 2
-text = "显示 frontier_outpost_stage"
+text = "frontier_outpost_stage"
 
 [node name="EndBattleButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=824202191]
 layout_mode = 2
-text = "结束战斗测试"
+text = "End Battle Test"

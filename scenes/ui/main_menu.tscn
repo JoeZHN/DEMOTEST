@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cc3gkhkjw3uw" path="res://scripts/ui/main_menu.gd" id="1_sl1te"]
 [ext_resource type="Texture2D" uid="uid://qitd2uj5u330" path="res://resources/talas.webp" id="2_fe2o3"]
-[ext_resource type="AudioStream" uid="uid://1ubq37wsdbjf" path="res://resources/路南 - 关山月_H.ogg" id="3_1g8jr"]
 
 [node name="MainMenu" type="Node2D" unique_id=1694972602]
 script = ExtResource("1_sl1te")
@@ -33,18 +32,14 @@ horizontal_alignment = 1
 [node name="StartButton" type="Button" parent="VBoxContainer" unique_id=136675335]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
-text = "开始游戏"
+text = "Start Game"
 
 [node name="BattleTestButton" type="Button" parent="VBoxContainer" unique_id=1368232516]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
-text = "测试战斗"
+text = "Battle Test"
 
 [node name="QuitButton" type="Button" parent="VBoxContainer" unique_id=1754897406]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
-text = "退出游戏"
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1360305021]
-stream = ExtResource("3_1g8jr")
-autoplay = true
+text = "Quit"

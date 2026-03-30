@@ -26,7 +26,7 @@ offset_right = 444.0
 offset_bottom = 114.0
 theme_override_constants/outline_size = 20
 theme_override_font_sizes/font_size = 80
-text = "第一章地图"
+text = "Chapter 1 Map"
 
 [node name="HintLabel" type="Label" parent="UI" unique_id=435055323]
 offset_left = 473.0
@@ -35,7 +35,7 @@ offset_right = 753.0
 offset_bottom = 607.0
 theme_override_constants/outline_size = 20
 theme_override_font_sizes/font_size = 35
-text = "点击节点前往地点"
+text = "Click a node to travel"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2027251787]
 position = Vector2(576, 323)

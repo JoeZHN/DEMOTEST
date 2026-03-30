@@ -11,15 +11,15 @@ var map_data: Dictionary = {}
 var spawned_nodes: Dictionary = {}
 
 func _ready() -> void:
-	title_label.text = "第一章地图"
-	hint_label.text = "点击节点前往地点"
+	title_label.text = "Chapter 1 World Map"
+	hint_label.text = "Click a node to travel"
 	_load_map_data()
 	_apply_game_state_to_map_data()
 	_spawn_nodes()
 
 func _load_map_data() -> void:
 	if not FileAccess.file_exists(MAP_DATA_PATH):
-		push_error("地图数据文件不存在: " + MAP_DATA_PATH)
+		push_error("Map data file does not exist: " + MAP_DATA_PATH)
 		return
 
 	var file := FileAccess.open(MAP_DATA_PATH, FileAccess.READ)
@@ -28,7 +28,7 @@ func _load_map_data() -> void:
 	var result := json.parse(content)
 
 	if result != OK:
-		push_error("地图 JSON 解析失败")
+		push_error("Failed to parse map JSON.")
 		return
 
 	map_data = json.data
@@ -47,13 +47,13 @@ func _spawn_nodes() -> void:
 		spawned_nodes[node_data["id"]] = node_instance
 
 func _on_node_selected(node_id: String, scene_path: String) -> void:
-	print("选择节点：", node_id)
+	print("Selected node:", node_id)
 	NodeTravel.go_to_scene(scene_path)
 
 func unlock_node(node_id: String) -> void:
 	if spawned_nodes.has(node_id):
 		spawned_nodes[node_id].set_unlocked(true)
-		
+
 func _apply_game_state_to_map_data() -> void:
 	if not map_data.has("nodes"):
 		return

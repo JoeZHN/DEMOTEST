@@ -42,15 +42,15 @@ color = Color(0, 0.61499304, 0.61758715, 1)
 
 [node name="SpeakerLabel" type="Label" parent="DialoguePanel/MarginContainer/MainVBox/HeaderRow" unique_id=1983929858]
 layout_mode = 2
-text = "发言人"
+text = "Speaker"
 
 [node name="ContentLabel" type="Label" parent="DialoguePanel/MarginContainer/MainVBox" unique_id=1580926577]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-text = "这里显示对话内容"
+text = "Dialogue content appears here"
 autowrap_mode = 2
 
 [node name="ContinueHint" type="Label" parent="DialoguePanel/MarginContainer/MainVBox" unique_id=937771068]
 layout_mode = 2
-text = "左键继续"
+text = "Left click to continue"
 horizontal_alignment = 2

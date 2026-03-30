@@ -21,24 +21,23 @@ layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=2057250855]
 layout_mode = 2
-text = "已离开商路"
+text = "Left Merchant Road"
 horizontal_alignment = 1
 
 [node name="DescriptionLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=2118590960]
 layout_mode = 2
-text = "你已完成商路阶段的当前目标。
-下一阶段地图待接入。"
+text = "Current merchant road objective is complete."
 horizontal_alignment = 1
 
 [node name="StageInfoLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1337013106]
 layout_mode = 2
-text = "阶段信息加载中..."
+text = "Loading stage data..."
 horizontal_alignment = 1
 
 [node name="BackButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=545143840]
 layout_mode = 2
-text = "返回商路测试"
+text = "Back to Merchant Road"
 
 [node name="ContinueButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=320423322]
 layout_mode = 2
-text = "进入下一阶段"
+text = "Continue"

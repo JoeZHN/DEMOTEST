@@ -9,8 +9,10 @@ var chapter1_node_unlocks: Dictionary = {
 var chapter1_flags: Dictionary = {
 	"dunhuang_intro_finished": false
 }
+
 var inventory: Array[String] = []
 var merchant_road_stage: int = 0
+var frontier_outpost_stage: int = 0
 
 func add_item(item_id: String) -> void:
 	if item_id in inventory:
@@ -47,8 +49,10 @@ func reset_chapter1_demo() -> void:
 	chapter1_flags = {
 		"dunhuang_intro_finished": false
 	}
+	inventory.clear()
+	merchant_road_stage = 0
+	frontier_outpost_stage = 0
 
-# 修复部分：使用 has() 代替 has_variable()
-func check_flag() -> void:
+func ensure_chapter1_flags() -> void:
 	if not chapter1_flags.has("frontier_outpost_stage"):
 		chapter1_flags["frontier_outpost_stage"] = 0
