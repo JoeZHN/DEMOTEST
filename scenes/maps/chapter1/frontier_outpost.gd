@@ -29,8 +29,11 @@ func _ready() -> void:
 
 	interaction_prompt.visible = false
 
-	if not GameState.has_variable("frontier_outpost_stage"):
+	if not GameState.has("frontier_outpost_stage"):
 		GameState.frontier_outpost_stage = 0
+
+
+
 
 	frontier_scout.interaction_entered.connect(_on_interactable_entered)
 	frontier_scout.interaction_exited.connect(_on_interactable_exited)

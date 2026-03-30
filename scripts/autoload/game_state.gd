@@ -47,3 +47,8 @@ func reset_chapter1_demo() -> void:
 	chapter1_flags = {
 		"dunhuang_intro_finished": false
 	}
+
+# 修复部分：使用 has() 代替 has_variable()
+func check_flag() -> void:
+	if not chapter1_flags.has("frontier_outpost_stage"):
+		chapter1_flags["frontier_outpost_stage"] = 0
