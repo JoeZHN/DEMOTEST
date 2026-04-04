@@ -73,7 +73,8 @@ offset_bottom = 23.0
 script = ExtResource("7_do0ms")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1323710325]
-position = Vector2(580, 324)
+position = Vector2(568, 350)
+zoom = Vector2(2.06, 2.06)
 
 [node name="Markers" type="Node2D" parent="." unique_id=1179255049]
 

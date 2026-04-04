@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dmw3o5ctwknad"]
+
+[ext_resource type="Script" uid="uid://buyrey41h7xlu" path="res://scripts/battle/battle_unit.gd" id="1_b86jy"]
+[ext_resource type="Texture2D" uid="uid://ci21yoax4mlei" path="res://icon.svg" id="2_lp05i"]
+
+[node name="BattleUnit" type="Node2D" unique_id=2014995936]
+script = ExtResource("1_b86jy")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=396924710]
+position = Vector2(36.5, 68.5)
+scale = Vector2(0.4296875, 0.3828125)
+texture = ExtResource("2_lp05i")
+
+[node name="NameLabel" type="Label" parent="." unique_id=175677632]
+offset_left = 16.999996
+offset_top = 13.0
+offset_right = 56.999996
+offset_bottom = 36.0
