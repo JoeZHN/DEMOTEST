@@ -1,34 +1,36 @@
 extends RefCounted
 class_name BattleLoader
 
+const ENCOUNTER_DIR := "res://data/battle/encounters/"
+const UNIT_DIR := "res://data/battle/units/"
+
 static func load_test_battle_config() -> Dictionary:
-	return {
-		"battle_id": "test_battle_001",
-		"battle_name": "Battle Framework Test",
-		"units": [
-			{
-				"unit_id": "player_huchao",
-				"display_name": "胡超",
-				"camp": "player",
-				"initiative": 10
-			},
-			{
-				"unit_id": "player_spearman",
-				"display_name": "枪兵队友",
-				"camp": "player",
-				"initiative": 8
-			},
-			{
-				"unit_id": "player_archer",
-				"display_name": "弓手队友",
-				"camp": "player",
-				"initiative": 12
-			},
-			{
-				"unit_id": "enemy_raider",
-				"display_name": "敌兵",
-				"camp": "enemy",
-				"initiative": 9
-			}
-		]
-	}
+	return load_encounter("frontier_skirmish_001")
+
+static func load_encounter(encounter_id: String) -> Dictionary:
+	var path := ENCOUNTER_DIR + encounter_id + ".json"
+	return _load_json_file(path)
+
+static func load_unit_data(unit_id: String) -> Dictionary:
+	var path := UNIT_DIR + unit_id + ".json"
+	return _load_json_file(path)
+
+static func _load_json_file(path: String) -> Dictionary:
+	if not FileAccess.file_exists(path):
+		push_error("JSON file does not exist: " + path)
+		return {}
+
+	var file := FileAccess.open(path, FileAccess.READ)
+	var content := file.get_as_text()
+
+	var json := JSON.new()
+	var result := json.parse(content)
+	if result != OK:
+		push_error("Failed to parse JSON: " + path)
+		return {}
+
+	if typeof(json.data) != TYPE_DICTIONARY:
+		push_error("JSON root must be a Dictionary: " + path)
+		return {}
+
+	return json.data

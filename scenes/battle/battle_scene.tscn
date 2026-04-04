@@ -1,11 +1,16 @@
 [gd_scene format=3 uid="uid://hesgqc1ue2kf"]
 
 [ext_resource type="Script" uid="uid://c2lm0nxa0jfdo" path="res://scripts/battle/battle_controller.gd" id="1_3hov6"]
+[ext_resource type="Script" uid="uid://cynq01816203t" path="res://scripts/battle/grid_visual.gd" id="2_pu738"]
+[ext_resource type="Script" uid="uid://bydc2axu8a2qv" path="res://scripts/battle/grid_manager.gd" id="3_ugm31"]
 
 [node name="BattleScene" type="Node2D" unique_id=1145025792]
 script = ExtResource("1_3hov6")
 
 [node name="BattleMap" type="Node2D" parent="." unique_id=1792339499]
+
+[node name="GridVisual" type="Node2D" parent="BattleMap" unique_id=1360984096]
+script = ExtResource("2_pu738")
 
 [node name="Units" type="Node2D" parent="." unique_id=1278177838]
 
@@ -44,4 +49,8 @@ offset_bottom = 99.0
 text = "Press Enter to advance turn"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=310704477]
-position = Vector2(234, 134)
+position = Vector2(767, 430)
+zoom = Vector2(1.25, 1.25)
+
+[node name="GridManager" type="Node2D" parent="." unique_id=818619455]
+script = ExtResource("3_ugm31")

@@ -1,0 +1,12 @@
+{
+  "unit_id": "enemy_raider_archer_01",
+  "display_name": "敌弓手",
+  "camp": "enemy",
+  "job": "raider_archer",
+  "initiative": 11,
+  "max_hp": 11,
+  "armor": 1,
+  "move_range": 5,
+  "max_ap": 2,
+  "base_damage": 5
+}

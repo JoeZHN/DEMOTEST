@@ -1,0 +1,12 @@
+{
+  "unit_id": "player_archer_01",
+  "display_name": "弓手队友",
+  "camp": "player",
+  "job": "archer",
+  "initiative": 12,
+  "max_hp": 12,
+  "armor": 1,
+  "move_range": 5,
+  "max_ap": 2,
+  "base_damage": 5
+}

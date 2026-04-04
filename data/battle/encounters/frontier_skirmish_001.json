@@ -1,0 +1,19 @@
+{
+  "battle_id": "frontier_skirmish_001",
+  "battle_name": "Frontier Skirmish",
+  "grid": {
+	"cols": 8,
+	"rows": 8,
+	"cell_size": 96
+  },
+  "player_units": [
+	{ "unit_id": "player_huchao", "spawn": [1, 5] },
+	{ "unit_id": "player_spearman_01", "spawn": [1, 3] },
+	{ "unit_id": "player_archer_01", "spawn": [0, 4] }
+  ],
+  "enemy_units": [
+	{ "unit_id": "enemy_raider_melee_01", "spawn": [6, 3] },
+	{ "unit_id": "enemy_raider_melee_01", "spawn": [6, 5] },
+	{ "unit_id": "enemy_raider_archer_01", "spawn": [7, 4] }
+  ]
+}
