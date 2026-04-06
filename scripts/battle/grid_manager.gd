@@ -24,10 +24,10 @@ func grid_to_world(grid_pos: Vector2i) -> Vector2:
 	)
 
 func world_to_grid(world_pos: Vector2) -> Vector2i:
-	var local := world_pos - origin
+	var local: Vector2 = world_pos - origin
 	return Vector2i(
-		roundi(local.x / cell_size),
-		roundi(local.y / cell_size)
+		floori(local.x / cell_size),
+		floori(local.y / cell_size)
 	)
 
 func get_manhattan_distance(a: Vector2i, b: Vector2i) -> int:
