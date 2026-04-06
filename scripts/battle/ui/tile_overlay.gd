@@ -42,9 +42,18 @@ func _draw() -> void:
 		_draw_cell_outline(selected_cell, Color(1.0, 1.0, 0.4, 1.0), 3.0)
 
 func _draw_cell_fill(cell: Vector2i, color: Color) -> void:
-	var top_left := grid_manager.grid_to_world(cell) - Vector2(grid_manager.cell_size, grid_manager.cell_size) * 0.5
-	draw_rect(Rect2(top_left, Vector2(grid_manager.cell_size, grid_manager.cell_size)), color, true)
+	var top_left: Vector2 = grid_manager.grid_to_world(cell)
+	draw_rect(
+		Rect2(top_left, Vector2(grid_manager.cell_size, grid_manager.cell_size)),
+		color,
+		true
+	)
 
 func _draw_cell_outline(cell: Vector2i, color: Color, width: float) -> void:
-	var top_left := grid_manager.grid_to_world(cell) - Vector2(grid_manager.cell_size, grid_manager.cell_size) * 0.5
-	draw_rect(Rect2(top_left, Vector2(grid_manager.cell_size, grid_manager.cell_size)), color, false, width)
+	var top_left: Vector2 = grid_manager.grid_to_world(cell)
+	draw_rect(
+		Rect2(top_left, Vector2(grid_manager.cell_size, grid_manager.cell_size)),
+		color,
+		false,
+		width
+	)

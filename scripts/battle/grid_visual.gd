@@ -3,7 +3,7 @@ extends Node2D
 var cols: int = 8
 var rows: int = 8
 var cell_size: int = 96
-var origin: Vector2 = Vector2(96, 96)
+var origin: Vector2 = Vector2(48, 48)
 
 func setup(new_cols: int, new_rows: int, new_cell_size: int, new_origin: Vector2) -> void:
 	cols = new_cols
