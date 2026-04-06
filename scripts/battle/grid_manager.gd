@@ -29,3 +29,35 @@ func world_to_grid(world_pos: Vector2) -> Vector2i:
 		roundi(local.x / cell_size),
 		roundi(local.y / cell_size)
 	)
+
+func get_manhattan_distance(a: Vector2i, b: Vector2i) -> int:
+	return abs(a.x - b.x) + abs(a.y - b.y)
+
+func get_cells_in_move_range(center: Vector2i, move_range: int) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+
+	for x in range(cols):
+		for y in range(rows):
+			var cell := Vector2i(x, y)
+			if get_manhattan_distance(center, cell) <= move_range:
+				result.append(cell)
+
+	return result
+
+func get_cells_in_attack_range(center: Vector2i, attack_range: int) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+
+	for x in range(cols):
+		for y in range(rows):
+			var cell := Vector2i(x, y)
+			var distance := get_manhattan_distance(center, cell)
+			if distance > 0 and distance <= attack_range:
+				result.append(cell)
+
+	return result
+
+func get_unit_at_grid(units: Array[BattleUnit], grid_pos: Vector2i) -> BattleUnit:
+	for unit in units:
+		if unit != null and unit.is_alive and unit.grid_position == grid_pos:
+			return unit
+	return null

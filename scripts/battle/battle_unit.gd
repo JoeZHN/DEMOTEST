@@ -13,6 +13,7 @@ var grid_position: Vector2i = Vector2i.ZERO
 @onready var name_label: Label = $NameLabel
 
 var stats: StatsComponent
+var action: ActionComponent
 
 func _ready() -> void:
 	name_label.text = display_name
@@ -28,6 +29,10 @@ func setup(data: Dictionary) -> void:
 		stats = StatsComponent.new()
 		add_child(stats)
 
+	if action == null:
+		action = ActionComponent.new()
+		add_child(action)
+
 	stats.setup(data)
 
 	if is_node_ready():
@@ -35,6 +40,22 @@ func setup(data: Dictionary) -> void:
 
 func set_grid_position(new_grid_pos: Vector2i) -> void:
 	grid_position = new_grid_pos
+
+func set_world_position_from_grid(grid_manager: GridManager) -> void:
+	position = grid_manager.grid_to_world(grid_position)
+
+func begin_turn() -> void:
+	stats.current_ap = stats.max_ap
+	action.reset_for_new_turn(stats.max_ap)
+
+func can_move() -> bool:
+	return action.can_move(stats.current_ap)
+
+func can_attack() -> bool:
+	return action.can_attack(stats.current_ap)
+
+func spend_ap(amount: int) -> void:
+	stats.current_ap = max(0, stats.current_ap - amount)
 
 func get_turn_label() -> String:
 	return "%s (%s, init=%d)" % [display_name, camp, initiative]
