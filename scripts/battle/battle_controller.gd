@@ -308,8 +308,8 @@ func _try_attack_current_unit_to(target_cell: Vector2i) -> void:
 	if target_unit.camp == current_unit.camp:
 		return
 
-	var final_damage := max(1, current_unit.stats.base_damage - target_unit.stats.armor)
-	target_unit.stats.hp = max(0, target_unit.stats.hp - final_damage)
+	var final_damage: int = int(max(1, current_unit.stats.base_damage - target_unit.stats.armor))
+	target_unit.stats.hp = int(max(0, target_unit.stats.hp - final_damage))
 
 	current_unit.spend_ap(1)
 	current_unit.action.mark_acted()
