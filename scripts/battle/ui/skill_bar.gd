@@ -1,12 +1,12 @@
 extends Control
 class_name SkillBar
 
-@onready var current_unit_label: Label = $HBoxContainer/CurrentUnitLabel
-@onready var attack_button_large: Button = $HBoxContainer/AttackButtonLarge
-@onready var skill_button_1: Button = $HBoxContainer/SkillButton1
-@onready var skill_button_2: Button = $HBoxContainer/SkillButton2
-@onready var skill_button_3: Button = $HBoxContainer/SkillButton3
-@onready var end_turn_button_large: Button = $HBoxContainer/EndTurnButtonLarge
+@onready var current_unit_label: Label = $CenterContainer/HBoxContainer/CurrentUnitLabel
+@onready var attack_button_large: Button = $CenterContainer/HBoxContainer/AttackButtonLarge
+@onready var skill_button_1: Button = $CenterContainer/HBoxContainer/SkillButton1
+@onready var skill_button_2: Button = $CenterContainer/HBoxContainer/SkillButton2
+@onready var skill_button_3: Button = $CenterContainer/HBoxContainer/SkillButton3
+@onready var end_turn_button_large: Button = $CenterContainer/HBoxContainer/EndTurnButtonLarge
 
 func refresh_for_unit(unit: BattleUnit) -> void:
 	if unit == null:
