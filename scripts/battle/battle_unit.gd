@@ -34,10 +34,10 @@ func setup(data: Dictionary) -> void:
 	if action == null:
 		action = ActionComponent.new()
 		add_child(action)
-		
+
 	if engagement == null:
-	engagement = EngagementComponent.new()
-	add_child(engagement)
+		engagement = EngagementComponent.new()
+		add_child(engagement)
 
 	stats.setup(data)
 
@@ -65,6 +65,7 @@ func spend_ap(amount: int) -> void:
 
 func get_turn_label() -> String:
 	return "%s (%s, init=%d)" % [display_name, camp, initiative]
+
 func is_archer_unit() -> bool:
 	return job == "archer" or job == "raider_archer"
 

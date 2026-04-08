@@ -78,10 +78,10 @@ script = ExtResource("4_o3k7m")
 
 [node name="InfoLabel" type="Label" parent="UI/UnitInfoPanel" unique_id=1673195298]
 layout_mode = 0
-offset_left = 490.0
-offset_top = 18.0
-offset_right = 530.0
-offset_bottom = 41.0
+offset_left = 1176.0
+offset_top = 31.0
+offset_right = 1216.0
+offset_bottom = 54.0
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=310704477]
 position = Vector2(767, 430)
