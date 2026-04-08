@@ -28,6 +28,7 @@ var all_units: Array[BattleUnit] = []
 var turn_manager: TurnManager
 var current_unit: BattleUnit = null
 var input_mode: String = "idle" # idle / player_move / player_attack / enemy_wait
+var battle_ai: BattleAI = BattleAI.new()
 
 func _ready() -> void:
 	turn_manager = TurnManager.new()
@@ -119,6 +120,9 @@ func _refresh_debug_ui() -> void:
 			unit.stats.current_ap
 		]
 
+	if battle_state == BattleConstants.STATE_FINISHED:
+		return
+
 	hint_label.text = (
 		"Left Click: move or attack target\n"
 		+ "Attack Button: enter attack mode\n"
@@ -141,12 +145,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif input_mode == "player_attack":
 			_try_attack_current_unit_to(clicked_cell)
 
-	elif event.is_action_pressed("ui_accept"):
-		get_viewport().set_input_as_handled()
 
-		if input_mode == "enemy_wait":
-			_advance_turn_for_debug()
-		
 func _spawn_single_unit_from_spawn_data(spawn_data: Dictionary) -> void:
 	var unit_id := str(spawn_data.get("unit_id", ""))
 	var spawn_array: Array = spawn_data.get("spawn", [])
@@ -188,9 +187,12 @@ func _begin_current_turn() -> void:
 	if current_unit.camp == BattleConstants.CAMP_PLAYER:
 		input_mode = "player_move"
 		_show_current_unit_move_range()
+		_refresh_debug_ui()
 	else:
 		input_mode = "enemy_wait"
 		tile_overlay.clear_all()
+		_refresh_debug_ui()
+		_run_enemy_turn()
 
 func _show_current_unit_move_range() -> void:
 	if current_unit == null:
@@ -318,7 +320,138 @@ func _try_attack_current_unit_to(target_cell: Vector2i) -> void:
 		target_unit.is_alive = false
 		target_unit.visible = false
 
+	var result: String = _check_battle_result()
+	if result != "":
+		_apply_battle_result(result)
+		return
+
 	input_mode = "player_move"
 	unit_info_panel.show_unit_info(current_unit)
 	_show_current_unit_move_range()
+	_refresh_debug_ui()
+
+func _run_enemy_turn() -> void:
+	if current_unit == null:
+		return
+
+	if not current_unit.is_alive:
+		_finish_enemy_turn()
+		return
+
+	if current_unit.camp != BattleConstants.CAMP_ENEMY:
+		return
+
+	await get_tree().create_timer(0.25).timeout
+
+	var target_unit: BattleUnit = battle_ai.find_nearest_player_unit(current_unit, all_units, grid_manager)
+	if target_unit == null:
+		_finish_enemy_turn()
+		return
+
+	if battle_ai.can_attack_target(current_unit, target_unit, grid_manager):
+		_enemy_try_attack(target_unit)
+		return
+
+	var best_move_cell: Vector2i = battle_ai.find_best_move_cell_toward_target(
+		current_unit,
+		target_unit,
+		all_units,
+		grid_manager
+	)
+
+	if best_move_cell != current_unit.grid_position:
+		_enemy_try_move(best_move_cell)
+		await get_tree().create_timer(0.2).timeout
+
+	if target_unit.is_alive and battle_ai.can_attack_target(current_unit, target_unit, grid_manager):
+		_enemy_try_attack(target_unit)
+		return
+
+	_finish_enemy_turn()
+	
+func _enemy_try_move(target_cell: Vector2i) -> void:
+	if current_unit == null:
+		return
+	if not current_unit.is_alive:
+		return
+	if not grid_manager.is_in_bounds(target_cell):
+		return
+
+	var occupant: BattleUnit = grid_manager.get_unit_at_grid(all_units, target_cell)
+	if occupant != null and occupant != current_unit:
+		return
+
+	current_unit.set_grid_position(target_cell)
+	current_unit.set_world_position_from_grid(grid_manager)
+	current_unit.action.mark_moved()
+
+	unit_info_panel.show_unit_info(current_unit)
+	_refresh_debug_ui()
+func _enemy_try_attack(target_unit: BattleUnit) -> void:
+	if current_unit == null or target_unit == null:
+		return
+	if not current_unit.is_alive or not target_unit.is_alive:
+		_finish_enemy_turn()
+		return
+
+	var final_damage: int = int(max(1, current_unit.stats.base_damage - target_unit.stats.armor))
+	target_unit.stats.hp = int(max(0, target_unit.stats.hp - final_damage))
+
+	current_unit.spend_ap(1)
+	current_unit.action.mark_acted()
+
+	if target_unit.stats.hp <= 0:
+		target_unit.is_alive = false
+		target_unit.visible = false
+
+	var result: String = _check_battle_result()
+	if result != "":
+		_apply_battle_result(result)
+		return
+
+	unit_info_panel.show_unit_info(current_unit)
+	_refresh_debug_ui()
+
+	await get_tree().create_timer(0.2).timeout
+	_finish_enemy_turn()
+func _finish_enemy_turn() -> void:
+	if battle_state != BattleConstants.STATE_RUNNING:
+		return
+
+	_advance_turn_for_debug()
+func _check_battle_result() -> String:
+	var alive_players: int = 0
+	var alive_enemies: int = 0
+
+	for unit in all_units:
+		if unit == null:
+			continue
+		if not unit.is_alive:
+			continue
+
+		if unit.camp == BattleConstants.CAMP_PLAYER:
+			alive_players += 1
+		elif unit.camp == BattleConstants.CAMP_ENEMY:
+			alive_enemies += 1
+
+	if alive_enemies == 0:
+		return "player_win"
+
+	if alive_players == 0:
+		return "enemy_win"
+
+	return ""
+func _apply_battle_result(result: String) -> void:
+	battle_state = BattleConstants.STATE_FINISHED
+	input_mode = "idle"
+	tile_overlay.clear_all()
+
+	match result:
+		"player_win":
+			hint_label.text = "Victory"
+		"enemy_win":
+			hint_label.text = "Defeat"
+		_:
+			hint_label.text = "Battle Finished"
+
 	_refresh_debug_ui()
