@@ -138,7 +138,16 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		get_viewport().set_input_as_handled()
-		var clicked_cell := _get_mouse_grid_position()
+		var clicked_cell: Vector2i = _get_mouse_grid_position()
+
+		var clicked_unit: BattleUnit = _get_alive_unit_at_cell(clicked_cell)
+		if clicked_unit != null:
+			unit_info_panel.show_unit_info(clicked_unit)
+
+			if input_mode == "player_attack":
+				if clicked_unit.camp != current_unit.camp:
+					_try_attack_current_unit_to(clicked_cell)
+			return
 
 		if input_mode == "player_move":
 			_try_move_current_unit_to(clicked_cell)
@@ -258,6 +267,19 @@ func _try_move_current_unit_to(target_cell: Vector2i) -> void:
 	if occupant != null and occupant != current_unit:
 		return
 
+	if _will_disengage(current_unit, target_cell):
+		var engaged_target: BattleUnit = current_unit.engagement.engaged_with
+		_apply_opportunity_attack(engaged_target, current_unit)
+
+		if not current_unit.is_alive or battle_state != BattleConstants.STATE_RUNNING:
+			unit_info_panel.show_unit_info(current_unit)
+			_refresh_debug_ui()
+			return
+
+		current_unit.engagement.clear_engagement()
+		if engaged_target != null and engaged_target.engagement != null and engaged_target.engagement.engaged_with == current_unit:
+			engaged_target.engagement.clear_engagement()
+	
 	current_unit.set_grid_position(target_cell)
 	current_unit.set_world_position_from_grid(grid_manager)
 	current_unit.action.mark_moved()
@@ -267,6 +289,20 @@ func _try_move_current_unit_to(target_cell: Vector2i) -> void:
 	
 func _get_mouse_grid_position() -> Vector2i:
 	return grid_manager.world_to_grid(get_global_mouse_position())
+func _get_alive_unit_at_cell(cell: Vector2i) -> BattleUnit:
+	var unit: BattleUnit = grid_manager.get_unit_at_grid(all_units, cell)
+	if unit == null:
+		return null
+	if not unit.is_alive:
+		return null
+	return unit
+func _inspect_clicked_unit(cell: Vector2i) -> bool:
+	var clicked_unit: BattleUnit = _get_alive_unit_at_cell(cell)
+	if clicked_unit == null:
+		return false
+
+	unit_info_panel.show_unit_info(clicked_unit)
+	return true
 	
 func _on_attack_button_pressed() -> void:
 	if current_unit == null:
@@ -276,6 +312,10 @@ func _on_attack_button_pressed() -> void:
 		return
 
 	if not current_unit.can_attack():
+		return
+
+	if current_unit.is_archer_unit() and not _can_unit_use_ranged_attack(current_unit):
+		unit_info_panel.show_unit_info(current_unit)
 		return
 
 	input_mode = "player_attack"
@@ -293,6 +333,9 @@ func _try_attack_current_unit_to(target_cell: Vector2i) -> void:
 		return
 
 	if not current_unit.can_attack():
+		return
+	
+	if current_unit.is_archer_unit() and not _can_unit_use_ranged_attack(current_unit):
 		return
 
 	var attack_range := 1
@@ -316,9 +359,14 @@ func _try_attack_current_unit_to(target_cell: Vector2i) -> void:
 	current_unit.spend_ap(1)
 	current_unit.action.mark_acted()
 
+	if current_unit.is_melee_unit() and _is_adjacent(current_unit.grid_position, target_unit.grid_position):
+		_create_engagement(current_unit, target_unit)
+
 	if target_unit.stats.hp <= 0:
 		target_unit.is_alive = false
 		target_unit.visible = false
+		_clear_engagement_if_needed(current_unit)
+		_clear_engagement_if_needed(target_unit)
 
 	var result: String = _check_battle_result()
 	if result != "":
@@ -345,6 +393,21 @@ func _run_enemy_turn() -> void:
 
 	var target_unit: BattleUnit = battle_ai.find_nearest_player_unit(current_unit, all_units, grid_manager)
 	if target_unit == null:
+		_finish_enemy_turn()
+		return
+
+	if current_unit.is_archer_unit() and not _can_unit_use_ranged_attack(current_unit):
+		var best_move_cell: Vector2i = battle_ai.find_best_move_cell_toward_target(
+			current_unit,
+			target_unit,
+			all_units,
+			grid_manager
+		)
+
+		if best_move_cell != current_unit.grid_position:
+			_enemy_try_move(best_move_cell)
+			await get_tree().create_timer(0.2).timeout
+
 		_finish_enemy_turn()
 		return
 
@@ -380,6 +443,18 @@ func _enemy_try_move(target_cell: Vector2i) -> void:
 	var occupant: BattleUnit = grid_manager.get_unit_at_grid(all_units, target_cell)
 	if occupant != null and occupant != current_unit:
 		return
+	
+	if _will_disengage(current_unit, target_cell):
+		var engaged_target: BattleUnit = current_unit.engagement.engaged_with
+		_apply_opportunity_attack(engaged_target, current_unit)
+
+		if not current_unit.is_alive or battle_state != BattleConstants.STATE_RUNNING:
+			_refresh_debug_ui()
+			return
+
+		current_unit.engagement.clear_engagement()
+		if engaged_target != null and engaged_target.engagement != null and engaged_target.engagement.engaged_with == current_unit:
+			engaged_target.engagement.clear_engagement()
 
 	current_unit.set_grid_position(target_cell)
 	current_unit.set_world_position_from_grid(grid_manager)
@@ -400,9 +475,15 @@ func _enemy_try_attack(target_unit: BattleUnit) -> void:
 	current_unit.spend_ap(1)
 	current_unit.action.mark_acted()
 
+	if current_unit.is_melee_unit() and _is_adjacent(current_unit.grid_position, target_unit.grid_position):
+		_create_engagement(current_unit, target_unit)
+
 	if target_unit.stats.hp <= 0:
 		target_unit.is_alive = false
 		target_unit.visible = false
+
+	_clear_engagement_if_needed(current_unit)
+	_clear_engagement_if_needed(target_unit)
 
 	var result: String = _check_battle_result()
 	if result != "":
@@ -455,3 +536,78 @@ func _apply_battle_result(result: String) -> void:
 			hint_label.text = "Battle Finished"
 
 	_refresh_debug_ui()
+func _is_adjacent(a: Vector2i, b: Vector2i) -> bool:
+	return grid_manager.get_manhattan_distance(a, b) == 1
+func _create_engagement(unit_a: BattleUnit, unit_b: BattleUnit) -> void:
+	if unit_a == null or unit_b == null:
+		return
+	if not unit_a.is_alive or not unit_b.is_alive:
+		return
+
+	unit_a.engagement.engage(unit_b)
+	unit_b.engagement.engage(unit_a)
+
+	unit_info_panel.show_unit_info(unit_a)
+func _clear_engagement_if_needed(unit: BattleUnit) -> void:
+	if unit == null:
+		return
+	if unit.engagement == null:
+		return
+
+	if not unit.engagement.has_valid_target():
+		unit.engagement.clear_engagement()
+		return
+
+	var other: BattleUnit = unit.engagement.engaged_with
+	if other == null or not other.is_alive:
+		unit.engagement.clear_engagement()
+		return
+
+	if not _is_adjacent(unit.grid_position, other.grid_position):
+		unit.engagement.clear_engagement()
+func _can_unit_use_ranged_attack(unit: BattleUnit) -> bool:
+	if unit == null:
+		return false
+
+	if not unit.is_archer_unit():
+		return true
+
+	if unit.engagement != null and unit.engagement.has_valid_target():
+		return false
+
+	return true
+func _will_disengage(unit: BattleUnit, target_cell: Vector2i) -> bool:
+	if unit == null:
+		return false
+	if unit.engagement == null:
+		return false
+	if not unit.engagement.has_valid_target():
+		return false
+
+	var engaged_target: BattleUnit = unit.engagement.engaged_with
+	if engaged_target == null or not engaged_target.is_alive:
+		return false
+
+	if not _is_adjacent(unit.grid_position, engaged_target.grid_position):
+		return false
+
+	return not _is_adjacent(target_cell, engaged_target.grid_position)
+func _apply_opportunity_attack(attacker: BattleUnit, target: BattleUnit) -> void:
+	if attacker == null or target == null:
+		return
+	if not attacker.is_alive or not target.is_alive:
+		return
+
+	var opportunity_damage: int = int(max(1, int(attacker.stats.base_damage * 0.5) - target.stats.armor))
+	target.stats.hp = int(max(0, target.stats.hp - opportunity_damage))
+
+	if target.stats.hp <= 0:
+		target.is_alive = false
+		target.visible = false
+
+	_clear_engagement_if_needed(attacker)
+	_clear_engagement_if_needed(target)
+
+	var result: String = _check_battle_result()
+	if result != "":
+		_apply_battle_result(result)

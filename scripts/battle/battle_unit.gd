@@ -10,10 +10,12 @@ class_name BattleUnit
 var is_alive: bool = true
 var grid_position: Vector2i = Vector2i.ZERO
 
+
 @onready var name_label: Label = $NameLabel
 
 var stats: StatsComponent
 var action: ActionComponent
+var engagement: EngagementComponent
 
 func _ready() -> void:
 	name_label.text = display_name
@@ -32,6 +34,10 @@ func setup(data: Dictionary) -> void:
 	if action == null:
 		action = ActionComponent.new()
 		add_child(action)
+		
+	if engagement == null:
+	engagement = EngagementComponent.new()
+	add_child(engagement)
 
 	stats.setup(data)
 
@@ -59,3 +65,8 @@ func spend_ap(amount: int) -> void:
 
 func get_turn_label() -> String:
 	return "%s (%s, init=%d)" % [display_name, camp, initiative]
+func is_archer_unit() -> bool:
+	return job == "archer" or job == "raider_archer"
+
+func is_melee_unit() -> bool:
+	return not is_archer_unit()

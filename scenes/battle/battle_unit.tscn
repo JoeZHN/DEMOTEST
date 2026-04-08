@@ -5,6 +5,11 @@
 
 [node name="BattleUnit" type="Node2D" unique_id=2014995936]
 script = ExtResource("1_b86jy")
+unit_id = null
+display_name = null
+camp = null
+initiative = null
+job = null
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=396924710]
 position = Vector2(36.5, 68.5)
@@ -12,7 +17,7 @@ scale = Vector2(0.4296875, 0.3828125)
 texture = ExtResource("2_lp05i")
 
 [node name="NameLabel" type="Label" parent="." unique_id=175677632]
-offset_left = 17.0
-offset_top = 17.0
-offset_right = 57.0
-offset_bottom = 40.0
+offset_left = 7.0
+offset_top = 18.0
+offset_right = 47.0
+offset_bottom = 41.0

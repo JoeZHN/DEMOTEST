@@ -67,3 +67,12 @@ static func find_best_move_cell_toward_target(
 			best_cell = cell
 
 	return best_cell
+	
+static func get_priority_target(enemy_unit: BattleUnit, units: Array[BattleUnit], grid_manager: GridManager) -> BattleUnit:
+	if enemy_unit == null:
+		return null
+
+	if enemy_unit.engagement != null and enemy_unit.engagement.has_valid_target():
+		return enemy_unit.engagement.engaged_with
+
+	return find_nearest_player_unit(enemy_unit, units, grid_manager)
