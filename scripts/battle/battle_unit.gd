@@ -16,6 +16,7 @@ var grid_position: Vector2i = Vector2i.ZERO
 var stats: StatsComponent
 var action: ActionComponent
 var engagement: EngagementComponent
+var skills: SkillComponent
 
 func _ready() -> void:
 	name_label.text = display_name
@@ -38,8 +39,12 @@ func setup(data: Dictionary) -> void:
 	if engagement == null:
 		engagement = EngagementComponent.new()
 		add_child(engagement)
-
+	if skills == null:
+		skills = SkillComponent.new()
+		add_child(skills)
+	
 	stats.setup(data)
+	skills.setup_for_job(job)
 
 	if is_node_ready():
 		name_label.text = display_name

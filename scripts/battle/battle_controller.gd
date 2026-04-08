@@ -15,10 +15,16 @@ const BATTLE_UNIT_SCENE := preload("res://scenes/battle/battle_unit.tscn")
 @onready var hint_label: Label = $UI/DebugPanel/HintLabel
 @onready var tile_overlay: TileOverlay = $BattleMap/TileOverlay
 @onready var unit_info_panel: UnitInfoPanel = $UI/UnitInfoPanel
+@onready var bottom_skill_bar: SkillBar = $UI/BottomSkillBar
+@onready var attack_button_large: Button = $UI/BottomSkillBar/HBoxContainer/AttackButtonLarge
+@onready var skill_button_1: Button = $UI/BottomSkillBar/HBoxContainer/SkillButton1
+@onready var skill_button_2: Button = $UI/BottomSkillBar/HBoxContainer/SkillButton2
+@onready var skill_button_3: Button = $UI/BottomSkillBar/HBoxContainer/SkillButton3
+@onready var end_turn_button_large: Button = $UI/BottomSkillBar/HBoxContainer/EndTurnButtonLarge
 @onready var battle_camera: Camera2D = $Camera2D
 @onready var attack_button: Button = $UI/DebugPanel/AttackButton
 @onready var end_turn_button: Button = $UI/DebugPanel/EndTurnButton
-
+@onready var turn_order_bar: TurnOrderBar = $UI/TurnOrderBar
 
 var battle_state: String = BattleConstants.STATE_INIT
 var battle_id: String = ""
@@ -27,8 +33,9 @@ var battle_name: String = ""
 var all_units: Array[BattleUnit] = []
 var turn_manager: TurnManager
 var current_unit: BattleUnit = null
-var input_mode: String = "idle" # idle / player_move / player_attack / enemy_wait
+var input_mode: String = "idle" # idle / player_move / player_attack / player_skill / enemy_wait
 var battle_ai: BattleAI = BattleAI.new()
+var selected_skill: SkillBase = null
 
 func _ready() -> void:
 	turn_manager = TurnManager.new()
@@ -36,6 +43,12 @@ func _ready() -> void:
 
 	attack_button.pressed.connect(_on_attack_button_pressed)
 	end_turn_button.pressed.connect(_on_end_turn_button_pressed)
+	attack_button_large.pressed.connect(_on_attack_button_pressed)
+	end_turn_button_large.pressed.connect(_on_end_turn_button_pressed)
+	skill_button_1.pressed.connect(func(): _on_skill_button_pressed(0))
+	skill_button_2.pressed.connect(func(): _on_skill_button_pressed(1))
+	skill_button_3.pressed.connect(func(): _on_skill_button_pressed(2))
+	
 
 	_start_test_battle()
 
@@ -131,7 +144,7 @@ func _refresh_debug_ui() -> void:
 		+ "Mode: %s\n" % input_mode
 		+ "Order: %s" % turn_manager.get_turn_order_debug_text()
 	)
-
+	turn_order_bar.refresh_text(turn_manager.get_turn_order_debug_text())
 func _unhandled_input(event: InputEvent) -> void:
 	if battle_state != BattleConstants.STATE_RUNNING:
 		return
@@ -153,7 +166,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			_try_move_current_unit_to(clicked_cell)
 		elif input_mode == "player_attack":
 			_try_attack_current_unit_to(clicked_cell)
-
+		elif input_mode == "player_skill":
+			_try_use_selected_skill(clicked_cell)
 
 func _spawn_single_unit_from_spawn_data(spawn_data: Dictionary) -> void:
 	var unit_id := str(spawn_data.get("unit_id", ""))
@@ -192,6 +206,8 @@ func _begin_current_turn() -> void:
 
 	current_unit.begin_turn()
 	unit_info_panel.show_unit_info(current_unit)
+	bottom_skill_bar.refresh_for_unit(current_unit)
+	selected_skill = null
 
 	if current_unit.camp == BattleConstants.CAMP_PLAYER:
 		input_mode = "player_move"
@@ -242,6 +258,20 @@ func _show_current_unit_attack_range() -> void:
 	tile_overlay.set_attack_cells(attack_cells)
 	tile_overlay.set_selected_cell(current_unit.grid_position)
 	
+func _show_selected_skill_range() -> void:
+	if current_unit == null or selected_skill == null:
+		tile_overlay.clear_all()
+		return
+
+	var skill_cells := grid_manager.get_cells_in_attack_range(
+		current_unit.grid_position,
+		selected_skill.range
+	)
+
+	tile_overlay.set_move_cells([])
+	tile_overlay.set_attack_cells(skill_cells)
+	tile_overlay.set_selected_cell(current_unit.grid_position)
+	
 func _try_move_current_unit_to(target_cell: Vector2i) -> void:
 	if current_unit == null:
 		return
@@ -285,6 +315,7 @@ func _try_move_current_unit_to(target_cell: Vector2i) -> void:
 	current_unit.action.mark_moved()
 
 	unit_info_panel.show_unit_info(current_unit)
+	bottom_skill_bar.refresh_for_unit(current_unit)
 	_show_current_unit_move_range()
 	
 func _get_mouse_grid_position() -> Vector2i:
@@ -303,7 +334,7 @@ func _inspect_clicked_unit(cell: Vector2i) -> bool:
 
 	unit_info_panel.show_unit_info(clicked_unit)
 	return true
-	
+
 func _on_attack_button_pressed() -> void:
 	if current_unit == null:
 		return
@@ -320,6 +351,34 @@ func _on_attack_button_pressed() -> void:
 
 	input_mode = "player_attack"
 	_show_current_unit_attack_range()
+	
+func _on_skill_button_pressed(index: int) -> void:
+	if current_unit == null:
+		return
+	if current_unit.camp != BattleConstants.CAMP_PLAYER:
+		return
+
+	var skill: SkillBase = current_unit.skills.get_skill_by_index(index)
+	if skill == null:
+		return
+	if not skill.can_use(current_unit, self):
+		return
+
+	selected_skill = skill
+
+	if skill.target_type == "self":
+		var success: bool = skill.execute(current_unit, current_unit.grid_position, self)
+		if success:
+			selected_skill = null
+			input_mode = "player_move"
+			unit_info_panel.show_unit_info(current_unit)
+			bottom_skill_bar.refresh_for_unit(current_unit)
+			_refresh_debug_ui()
+		return
+
+	input_mode = "player_skill"
+	_show_selected_skill_range()
+	
 func _on_end_turn_button_pressed() -> void:
 	if current_unit == null:
 		return
@@ -375,8 +434,37 @@ func _try_attack_current_unit_to(target_cell: Vector2i) -> void:
 
 	input_mode = "player_move"
 	unit_info_panel.show_unit_info(current_unit)
+	bottom_skill_bar.refresh_for_unit(current_unit)
 	_show_current_unit_move_range()
 	_refresh_debug_ui()
+	
+func _try_use_selected_skill(target_cell: Vector2i) -> void:
+	if current_unit == null:
+		return
+	if selected_skill == null:
+		return
+	if input_mode != "player_skill":
+		return
+
+	var success: bool = selected_skill.execute(current_unit, target_cell, self)
+	if not success:
+		return
+
+	selected_skill = null
+	input_mode = "player_move"
+
+	_clear_engagement_if_needed(current_unit)
+
+	var result: String = _check_battle_result()
+	if result != "":
+		_apply_battle_result(result)
+		return
+
+	unit_info_panel.show_unit_info(current_unit)
+	bottom_skill_bar.refresh_for_unit(current_unit)
+	_show_current_unit_move_range()
+	_refresh_debug_ui()
+
 
 func _run_enemy_turn() -> void:
 	if current_unit == null:
