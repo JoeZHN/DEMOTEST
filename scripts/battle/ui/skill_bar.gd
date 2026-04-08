@@ -11,15 +11,28 @@ class_name SkillBar
 func refresh_for_unit(unit: BattleUnit) -> void:
 	if unit == null:
 		current_unit_label.text = "No Unit"
+
+		attack_button_large.text = "普攻"
+		attack_button_large.disabled = true
+
 		skill_button_1.text = "-"
 		skill_button_2.text = "-"
 		skill_button_3.text = "-"
 		skill_button_1.disabled = true
 		skill_button_2.disabled = true
 		skill_button_3.disabled = true
+
+		end_turn_button_large.text = "结束回合"
+		end_turn_button_large.disabled = true
 		return
 
 	current_unit_label.text = "%s  AP:%d/%d" % [unit.display_name, unit.stats.current_ap, unit.stats.max_ap]
+
+	attack_button_large.text = "普攻"
+	attack_button_large.disabled = unit.stats.current_ap < 1
+
+	end_turn_button_large.text = "结束回合"
+	end_turn_button_large.disabled = false
 
 	var skill_list: Array[SkillBase] = unit.skills.get_all_skills()
 

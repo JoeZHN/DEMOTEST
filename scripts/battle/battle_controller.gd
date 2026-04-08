@@ -160,7 +160,20 @@ func _unhandled_input(event: InputEvent) -> void:
 			if input_mode == "player_attack":
 				if clicked_unit.camp != current_unit.camp:
 					_try_attack_current_unit_to(clicked_cell)
+				return
+
+			if input_mode == "player_skill":
+				_try_use_selected_skill(clicked_cell)
+				return
+
 			return
+
+		if input_mode == "player_move":
+			_try_move_current_unit_to(clicked_cell)
+		elif input_mode == "player_attack":
+			_try_attack_current_unit_to(clicked_cell)
+		elif input_mode == "player_skill":
+			_try_use_selected_skill(clicked_cell)
 
 		if input_mode == "player_move":
 			_try_move_current_unit_to(clicked_cell)
