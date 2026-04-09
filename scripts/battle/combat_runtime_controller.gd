@@ -59,36 +59,6 @@ func initialize_runtime(runtime_data: Dictionary) -> void:
 	_start_first_turn()
 	_refresh_runtime_ui()
 
-func _start_test_battle() -> void:
-	battle_state = BattleConstants.STATE_SETUP
-	_refresh_runtime_ui()
-
-	var battle_config := BattleLoader.load_encounter("frontier_skirmish_001")
-	if battle_config.is_empty():
-		push_error("Failed to load encounter data.")
-		return
-
-	battle_id = str(battle_config.get("battle_id", ""))
-	battle_name = str(battle_config.get("battle_name", "Unnamed Battle"))
-
-	var grid_data: Dictionary = battle_config.get("grid", {})
-	grid_manager.setup(grid_data)
-
-	if grid_visual.has_method("setup"):
-		grid_visual.setup(
-			grid_manager.cols,
-			grid_manager.rows,
-			grid_manager.cell_size,
-			grid_manager.origin
-		)
-	tile_overlay.setup(grid_manager)
-	_spawn_encounter_units(battle_config)
-
-	turn_manager.setup(all_units)
-
-	battle_state = BattleConstants.STATE_RUNNING
-	_start_first_turn()
-	_refresh_runtime_ui()
 
 func _spawn_runtime_units(runtime_data: Dictionary) -> void:
 	all_units.clear()
@@ -105,25 +75,10 @@ func _spawn_runtime_units(runtime_data: Dictionary) -> void:
 	for spawn_data in enemy_units:
 		_spawn_single_unit_from_spawn_data(spawn_data)
 
-func _spawn_encounter_units(battle_config: Dictionary) -> void:
-	all_units.clear()
-
-	for child in units_container.get_children():
-		child.queue_free()
-
-	var player_units: Array = battle_config.get("player_units", [])
-	var enemy_units: Array = battle_config.get("enemy_units", [])
-
-	for spawn_data in player_units:
-		_spawn_single_unit_from_spawn_data(spawn_data)
-
-	for spawn_data in enemy_units:
-		_spawn_single_unit_from_spawn_data(spawn_data)
 
 func _start_first_turn() -> void:
 	var unit := turn_manager.start_first_turn()
 	if unit == null:
-		turn_info_label.text = "Turn: None"
 		return
 
 	_begin_current_turn()
@@ -135,37 +90,11 @@ func _advance_turn_for_debug() -> void:
 
 	var unit := turn_manager.advance_turn()
 	if unit == null:
-		turn_info_label.text = "Turn: None"
 		return
 
 	_begin_current_turn()
 	_refresh_runtime_ui()
 
-func _refresh_runtime_ui() -> void:
-	battle_state_label.text = "Battle State: %s | %s" % [battle_state, battle_name]
-
-	var unit := turn_manager.get_current_unit()
-	if unit == null:
-		turn_info_label.text = "Turn: None"
-	else:
-		turn_info_label.text = "Round %d | Current: %s | AP:%d" % [
-			turn_manager.round_index,
-			unit.get_turn_label(),
-			unit.stats.current_ap
-		]
-
-	if battle_state == BattleConstants.STATE_FINISHED:
-		return
-
-	hint_label.text = (
-		"Left Click: move or attack target\n"
-		+ "Attack Button: enter attack mode\n"
-		+ "End Turn: next turn\n"
-		+ "Grid: %dx%d  Cell:%d\n" % [grid_manager.cols, grid_manager.rows, grid_manager.cell_size]
-		+ "Mode: %s\n" % input_mode
-		+ "Order: %s" % turn_manager.get_turn_order_debug_text()
-	)
-	turn_order_bar.refresh_text(turn_manager.get_turn_order_debug_text())
 func _unhandled_input(event: InputEvent) -> void:
 	if battle_state != BattleConstants.STATE_RUNNING:
 		return
@@ -188,13 +117,6 @@ func _unhandled_input(event: InputEvent) -> void:
 				return
 
 			return
-
-		if input_mode == "player_move":
-			_try_move_current_unit_to(clicked_cell)
-		elif input_mode == "player_attack":
-			_try_attack_current_unit_to(clicked_cell)
-		elif input_mode == "player_skill":
-			_try_use_selected_skill(clicked_cell)
 
 		if input_mode == "player_move":
 			_try_move_current_unit_to(clicked_cell)
@@ -650,18 +572,11 @@ func _apply_battle_result(result: String) -> void:
 	tile_overlay.clear_all()
 
 	emit_signal("battle_finished", result)
-
-	match result:
-		"player_win":
-			hint_label.text = "Victory"
-		"enemy_win":
-			hint_label.text = "Defeat"
-		_:
-			hint_label.text = "Battle Finished"
-
 	_refresh_runtime_ui()
+
 func _is_adjacent(a: Vector2i, b: Vector2i) -> bool:
 	return grid_manager.get_manhattan_distance(a, b) == 1
+
 func _create_engagement(unit_a: BattleUnit, unit_b: BattleUnit) -> void:
 	if unit_a == null or unit_b == null:
 		return
