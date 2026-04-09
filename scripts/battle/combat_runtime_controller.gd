@@ -275,7 +275,8 @@ func _try_move_current_unit_to(target_cell: Vector2i) -> void:
 	_show_current_unit_move_range()
 	
 func _get_mouse_grid_position() -> Vector2i:
-	return grid_manager.world_to_grid(get_global_mouse_position())
+	return grid_manager.world_to_grid(combat_layer.get_global_mouse_position())
+
 func _get_alive_unit_at_cell(cell: Vector2i) -> BattleUnit:
 	var unit: BattleUnit = grid_manager.get_unit_at_grid(all_units, cell)
 	if unit == null:

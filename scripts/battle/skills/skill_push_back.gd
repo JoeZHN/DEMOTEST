@@ -7,7 +7,7 @@ func _init() -> void:
 	range = 1
 	target_type = "enemy"
 
-func execute(user: BattleUnit, target_cell: Vector2i, controller: BattleController) -> bool:
+func execute(user: BattleUnit, target_cell: Vector2i, controller: CombatRuntimeController) -> bool:
 	if not can_use(user, controller):
 		return false
 
