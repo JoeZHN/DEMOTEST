@@ -14,4 +14,13 @@ func interact() -> void:
 		print("Battle is locked. Talk to the scout first.")
 		return
 
-	get_tree().change_scene_to_file("res://scenes/battle/chapter1/frontier_skirmish_placeholder.tscn")
+	var scene_root := get_tree().current_scene
+	if scene_root == null:
+		return
+
+	var combat_controller := scene_root.get_node_or_null("CombatController")
+	if combat_controller == null:
+		push_error("CombatController not found in current scene.")
+		return
+
+	combat_controller.enter_combat_mode("frontier_skirmish_001")

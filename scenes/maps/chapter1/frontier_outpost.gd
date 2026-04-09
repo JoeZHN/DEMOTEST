@@ -10,6 +10,7 @@ extends Node2D
 
 @onready var camera: Camera2D = $Camera2D
 @onready var interaction_prompt: Label = $UI/InteractionPrompt
+@onready var combat_controller: FrontierOutpostCombatController = $CombatController
 
 var dialogue_box: DialogueBox
 var is_dialogue_running: bool = false
@@ -42,6 +43,9 @@ func _ready() -> void:
 	dialogue_box.dialogue_finished.connect(_on_dialogue_finished)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if combat_controller.current_mode == "combat":
+		return
+
 	if is_dialogue_running:
 		return
 

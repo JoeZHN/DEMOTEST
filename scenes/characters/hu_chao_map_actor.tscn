@@ -167,19 +167,17 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tunq2"]
-radius = 13.0
-height = 40.0
+radius = 18.0
+height = 64.0
 
 [node name="HuChaoMapActor" type="CharacterBody2D" unique_id=427391446]
 script = ExtResource("1_rjnj0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=770147360]
-position = Vector2(-1, -1.9999995)
-scale = Vector2(0.22058824, 0.22549021)
+scale = Vector2(0.28553924, 0.30392155)
 sprite_frames = SubResource("SpriteFrames_l0nra")
-animation = &"walk_up"
+animation = &"walk_down"
 autoplay = "walk_down"
-frame_progress = 0.31472895
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1253597705]
 shape = SubResource("CapsuleShape2D_tunq2")

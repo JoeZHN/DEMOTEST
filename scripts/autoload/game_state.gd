@@ -13,6 +13,8 @@ var chapter1_flags: Dictionary = {
 var inventory: Array[String] = []
 var merchant_road_stage: int = 0
 var frontier_outpost_stage: int = 0
+var current_battle_id: String = ""
+var frontier_outpost_mode: String = "exploration"
 
 func add_item(item_id: String) -> void:
 	if item_id in inventory:
@@ -52,6 +54,8 @@ func reset_chapter1_demo() -> void:
 	inventory.clear()
 	merchant_road_stage = 0
 	frontier_outpost_stage = 0
+	current_battle_id = ""
+	frontier_outpost_mode = "exploration"
 
 func ensure_chapter1_flags() -> void:
 	if not chapter1_flags.has("frontier_outpost_stage"):
