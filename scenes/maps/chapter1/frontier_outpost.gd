@@ -4,7 +4,7 @@ extends Node2D
 @onready var scout_spawn: Marker2D = $Markers/ScoutSpawn
 @onready var battle_trigger_spawn: Marker2D = $Markers/BattleTriggerSpawn
 
-@onready var hu_chao: CharacterBody2D = $Characters/HuChao
+@onready var hu_chao: MapCombatUnit = $Characters/HuChao
 @onready var frontier_scout: InteractableArea2D = $Characters/FrontierScout
 @onready var battle_trigger_point: InteractableArea2D = $Interactables/BattleTriggerPoint
 

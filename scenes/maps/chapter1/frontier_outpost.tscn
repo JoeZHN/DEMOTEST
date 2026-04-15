@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://y76w7iyl42l1" path="res://scenes/maps/chapter1/frontier_outpost.gd" id="1_od83l"]
 [ext_resource type="PackedScene" uid="uid://b7d58kg72lh4f" path="res://scenes/characters/hu_chao_map_actor.tscn" id="2_pi065"]
 [ext_resource type="PackedScene" uid="uid://dbknn2a7aesbr" path="res://scenes/characters/frontier_scout_map_actor.tscn" id="4_do0ms"]
+[ext_resource type="Script" uid="uid://q4gm776hilj2" path="res://scripts/units/map_combat_unit.gd" id="4_kbfh4"]
 [ext_resource type="Script" uid="uid://b4pnhy37ow22w" path="res://scripts/characters/frontier_scout_map_actor.gd" id="5_rlv5u"]
 [ext_resource type="PackedScene" uid="uid://bw6xvb01wnr84" path="res://scenes/interactables/battle_trigger_point.tscn" id="6_1j8rg"]
 [ext_resource type="Script" uid="uid://myvowl32h5c7" path="res://scripts/ui/interaction_prompt.gd" id="7_do0ms"]
@@ -62,7 +63,53 @@ tile_set = SubResource("TileSet_do0ms")
 [node name="Characters" type="Node2D" parent="." unique_id=1088566705]
 position = Vector2(15, 4)
 
-[node name="HuChao" parent="Characters" unique_id=427391446 instance=ExtResource("2_pi065")]
+[node name="EnemyRaiderArcher01" parent="Characters" unique_id=427391446 groups=["combat_enemy_unit"] instance=ExtResource("2_pi065")]
+script = ExtResource("4_kbfh4")
+unit_id = null
+display_name = null
+camp = null
+job = null
+initiative = null
+
+[node name="EnemyRaider02" parent="Characters" unique_id=638024337 groups=["combat_enemy_unit"] instance=ExtResource("2_pi065")]
+script = ExtResource("4_kbfh4")
+unit_id = null
+display_name = null
+camp = null
+job = null
+initiative = null
+
+[node name="EnemyRaider01" parent="Characters" unique_id=777421646 groups=["combat_enemy_unit"] instance=ExtResource("2_pi065")]
+script = ExtResource("4_kbfh4")
+unit_id = null
+display_name = null
+camp = null
+job = null
+initiative = null
+
+[node name="AllyArcher" parent="Characters" unique_id=180687386 groups=["combat_player_unit"] instance=ExtResource("2_pi065")]
+script = ExtResource("4_kbfh4")
+unit_id = null
+display_name = null
+camp = null
+job = null
+initiative = null
+
+[node name="AllySpearman" parent="Characters" unique_id=1568027328 groups=["combat_player_unit"] instance=ExtResource("2_pi065")]
+script = ExtResource("4_kbfh4")
+unit_id = null
+display_name = null
+camp = null
+job = null
+initiative = null
+
+[node name="HuChao" parent="Characters" unique_id=2002541376 groups=["combat_player_unit"] instance=ExtResource("2_pi065")]
+script = ExtResource("4_kbfh4")
+unit_id = null
+display_name = null
+camp = null
+job = null
+initiative = null
 
 [node name="FrontierScout" parent="Characters" unique_id=1741598075 instance=ExtResource("4_do0ms")]
 script = ExtResource("5_rlv5u")

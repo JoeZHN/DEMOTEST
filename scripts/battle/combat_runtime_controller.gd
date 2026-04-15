@@ -3,7 +3,6 @@ class_name CombatRuntimeController
 
 signal battle_finished(result: String)
 
-const BATTLE_UNIT_SCENE := preload("res://scenes/battle/battle_unit.tscn")
 
 @onready var combat_layer: Node2D = $".."
 @onready var units_container: Node2D = $"../CombatUnits"
@@ -24,9 +23,9 @@ var battle_state: String = BattleConstants.STATE_INIT
 var battle_id: String = ""
 var battle_name: String = ""
 
-var all_units: Array[BattleUnit] = []
+var all_units: Array[MapCombatUnit] = []
 var turn_manager: TurnManager
-var current_unit: BattleUnit = null
+var current_unit: MapCombatUnit = null
 var input_mode: String = "idle" # idle / player_move / player_attack / player_skill / enemy_wait
 var battle_ai: BattleAI = BattleAI.new()
 var selected_skill: SkillBase = null
@@ -63,18 +62,28 @@ func initialize_runtime(runtime_data: Dictionary) -> void:
 func _spawn_runtime_units(runtime_data: Dictionary) -> void:
 	all_units.clear()
 
-	for child in units_container.get_children():
-		child.queue_free()
-
 	var player_units: Array = runtime_data.get("player_units", [])
 	var enemy_units: Array = runtime_data.get("enemy_units", [])
 
-	for spawn_data in player_units:
-		_spawn_single_unit_from_spawn_data(spawn_data)
+	for unit in player_units:
+		if unit != null and unit is MapCombatUnit and unit.is_alive:
+			_register_runtime_unit(unit)
 
-	for spawn_data in enemy_units:
-		_spawn_single_unit_from_spawn_data(spawn_data)
+	for unit in enemy_units:
+		if unit != null and unit is MapCombatUnit and unit.is_alive:
+			_register_runtime_unit(unit)
 
+func _register_runtime_unit(unit: MapCombatUnit) -> void:
+	if unit == null:
+		return
+
+	var world_pos: Vector2 = unit.global_position
+	var grid_pos: Vector2i = grid_manager.world_to_grid(world_pos)
+
+	unit.set_grid_position(grid_pos)
+	unit.set_world_position_from_grid(grid_manager)
+
+	all_units.append(unit)
 
 func _start_first_turn() -> void:
 	var unit := turn_manager.start_first_turn()
@@ -124,32 +133,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			_try_attack_current_unit_to(clicked_cell)
 		elif input_mode == "player_skill":
 			_try_use_selected_skill(clicked_cell)
-
-func _spawn_single_unit_from_spawn_data(spawn_data: Dictionary) -> void:
-	var unit_id := str(spawn_data.get("unit_id", ""))
-	var spawn_array: Array = spawn_data.get("spawn", [])
-
-	if unit_id.is_empty() or spawn_array.size() < 2:
-		push_error("Invalid spawn data.")
-		return
-
-	var unit_data := BattleLoader.load_unit_data(unit_id)
-	if unit_data.is_empty():
-		push_error("Failed to load unit data for: " + unit_id)
-		return
-
-	var grid_pos := Vector2i(int(spawn_array[0]), int(spawn_array[1]))
-	if not grid_manager.is_in_bounds(grid_pos):
-		push_error("Spawn out of bounds for unit: " + unit_id)
-		return
-
-	var unit_instance: BattleUnit = BATTLE_UNIT_SCENE.instantiate()
-	units_container.add_child(unit_instance)
-	unit_instance.setup(unit_data)
-	unit_instance.set_grid_position(grid_pos)
-	unit_instance.position = grid_manager.grid_to_world(grid_pos)
-
-	all_units.append(unit_instance)
 
 func _begin_current_turn() -> void:
 	current_unit = turn_manager.get_current_unit()
@@ -266,8 +249,7 @@ func _try_move_current_unit_to(target_cell: Vector2i) -> void:
 		if engaged_target != null and engaged_target.engagement != null and engaged_target.engagement.engaged_with == current_unit:
 			engaged_target.engagement.clear_engagement()
 	
-	current_unit.set_grid_position(target_cell)
-	current_unit.set_world_position_from_grid(grid_manager)
+	current_unit.move_to_grid_immediate(target_cell, grid_manager)
 	current_unit.action.mark_moved()
 
 	unit_info_panel.show_unit_info(current_unit)

@@ -4,6 +4,7 @@ class_name FrontierOutpostCombatController
 @onready var combat_layer: Node2D = $"../CombatLayer"
 @onready var runtime_controller: CombatRuntimeController = $"../CombatLayer/CombatRuntimeController"
 @onready var grid_manager: GridManager = $"../CombatLayer/GridManager"
+@onready var scene_root: Node = $".."
 
 var current_mode: String = "exploration" # exploration / combat / result
 var current_battle_id: String = ""
@@ -37,11 +38,28 @@ func exit_combat_mode(result: String) -> void:
 
 func _build_runtime_data(battle_id: String) -> Dictionary:
 	var encounter: Dictionary = BattleLoader.load_encounter(battle_id)
+	var map_units: Dictionary = _collect_map_units()
 
 	return {
 		"battle_id": encounter.get("battle_id", battle_id),
 		"battle_name": encounter.get("battle_name", "Map Combat"),
 		"grid": encounter.get("grid", {}),
-		"player_units": encounter.get("player_units", []),
-		"enemy_units": encounter.get("enemy_units", [])
+		"player_units": map_units.get("player_units", []),
+		"enemy_units": map_units.get("enemy_units", [])
+	}
+func _collect_map_units() -> Dictionary:
+	var player_units: Array[MapCombatUnit] = []
+	var enemy_units: Array[MapCombatUnit] = []
+
+	for node in get_tree().get_nodes_in_group("combat_player_unit"):
+		if node is MapCombatUnit:
+			player_units.append(node)
+
+	for node in get_tree().get_nodes_in_group("combat_enemy_unit"):
+		if node is MapCombatUnit:
+			enemy_units.append(node)
+
+	return {
+		"player_units": player_units,
+		"enemy_units": enemy_units
 	}
