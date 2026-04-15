@@ -10,7 +10,7 @@ class_name MapCombatUnit
 var grid_position: Vector2i = Vector2i.ZERO
 var is_alive: bool = true
 
-# 探索态沿用的移动开关，兼容你当前 frontier_outpost.gd 里的 hu_chao.can_move = false/true
+# 探索态沿用的移动开关，兼容 frontier_outpost.gd 里的 hu_chao.can_move = false/true
 var can_move: bool = true
 
 var stats: StatsComponent
@@ -50,17 +50,20 @@ func setup_from_unit_data(data: Dictionary) -> void:
 	skills.setup_for_job(job)
 
 func begin_turn() -> void:
-	action.begin_turn()
-	if stats.has_method("begin_turn"):
-		stats.begin_turn()
+	_ensure_components()
+	stats.current_ap = stats.max_ap
+	action.reset_for_new_turn(stats.max_ap)
 
 func can_battle_move() -> bool:
-	return is_alive and not action.has_moved_this_turn and stats.current_ap > 0
+	_ensure_components()
+	return action.can_move(stats.current_ap) and is_alive
 
 func can_attack() -> bool:
-	return is_alive and not action.has_acted_this_turn and stats.current_ap > 0
+	_ensure_components()
+	return action.can_attack(stats.current_ap) and is_alive
 
 func spend_ap(amount: int) -> void:
+	_ensure_components()
 	stats.current_ap = max(0, stats.current_ap - amount)
 
 func set_grid_position(new_grid_position: Vector2i) -> void:
