@@ -218,7 +218,7 @@ func _try_move_current_unit_to(target_cell: Vector2i) -> void:
 	if input_mode != "player_move":
 		return
 
-	if not current_unit.can_move():
+	if not current_unit.can_battle_move():
 		return
 
 	if not grid_manager.is_in_bounds(target_cell):

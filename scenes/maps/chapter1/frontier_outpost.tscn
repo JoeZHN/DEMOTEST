@@ -65,51 +65,51 @@ position = Vector2(15, 4)
 
 [node name="EnemyRaiderArcher01" parent="Characters" unique_id=427391446 groups=["combat_enemy_unit"] instance=ExtResource("2_pi065")]
 script = ExtResource("4_kbfh4")
-unit_id = null
-display_name = null
-camp = null
-job = null
-initiative = null
+unit_id = ""
+display_name = "Unit"
+camp = "neutral"
+job = ""
+initiative = 10
 
 [node name="EnemyRaider02" parent="Characters" unique_id=638024337 groups=["combat_enemy_unit"] instance=ExtResource("2_pi065")]
 script = ExtResource("4_kbfh4")
-unit_id = null
-display_name = null
-camp = null
-job = null
-initiative = null
+unit_id = ""
+display_name = "Unit"
+camp = "neutral"
+job = ""
+initiative = 10
 
 [node name="EnemyRaider01" parent="Characters" unique_id=777421646 groups=["combat_enemy_unit"] instance=ExtResource("2_pi065")]
 script = ExtResource("4_kbfh4")
-unit_id = null
-display_name = null
-camp = null
-job = null
-initiative = null
+unit_id = ""
+display_name = "Unit"
+camp = "neutral"
+job = ""
+initiative = 10
 
 [node name="AllyArcher" parent="Characters" unique_id=180687386 groups=["combat_player_unit"] instance=ExtResource("2_pi065")]
 script = ExtResource("4_kbfh4")
-unit_id = null
-display_name = null
-camp = null
-job = null
-initiative = null
+unit_id = ""
+display_name = "Unit"
+camp = "neutral"
+job = ""
+initiative = 10
 
 [node name="AllySpearman" parent="Characters" unique_id=1568027328 groups=["combat_player_unit"] instance=ExtResource("2_pi065")]
 script = ExtResource("4_kbfh4")
-unit_id = null
-display_name = null
-camp = null
-job = null
-initiative = null
+unit_id = ""
+display_name = "Unit"
+camp = "neutral"
+job = ""
+initiative = 10
 
 [node name="HuChao" parent="Characters" unique_id=2002541376 groups=["combat_player_unit"] instance=ExtResource("2_pi065")]
 script = ExtResource("4_kbfh4")
-unit_id = null
-display_name = null
-camp = null
-job = null
-initiative = null
+unit_id = ""
+display_name = "Unit"
+camp = "neutral"
+job = ""
+initiative = 10
 
 [node name="FrontierScout" parent="Characters" unique_id=1741598075 instance=ExtResource("4_do0ms")]
 script = ExtResource("5_rlv5u")

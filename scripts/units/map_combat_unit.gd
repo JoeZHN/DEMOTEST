@@ -52,7 +52,7 @@ func begin_turn() -> void:
 	if stats.has_method("begin_turn"):
 		stats.begin_turn()
 
-func can_move() -> bool:
+func can_battle_move() -> bool:
 	return is_alive and not action.has_moved_this_turn and stats.current_ap > 0
 
 func can_attack() -> bool:
