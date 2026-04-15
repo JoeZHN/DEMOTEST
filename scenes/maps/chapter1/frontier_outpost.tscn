@@ -79,7 +79,7 @@ script = ExtResource("4_kbfh4")
 script = ExtResource("4_kbfh4")
 
 [node name="HuChao" parent="Characters" unique_id=2002541376 groups=["combat_player_unit"] instance=ExtResource("2_pi065")]
-script = ExtResource("4_kbfh4")
+position = Vector2(1, -1)
 
 [node name="FrontierScout" parent="Characters" unique_id=1741598075 instance=ExtResource("4_do0ms")]
 script = ExtResource("5_rlv5u")
