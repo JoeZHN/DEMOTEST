@@ -1,19 +1,23 @@
 extends Node
 class_name TurnManager
 
-var turn_order: Array[BattleUnit] = []
+var turn_order: Array = []
 var current_index: int = -1
 var round_index: int = 1
 
-func setup(units: Array[BattleUnit]) -> void:
+func setup(units: Array) -> void:
 	turn_order = units.duplicate()
-	turn_order.sort_custom(func(a: BattleUnit, b: BattleUnit) -> bool:
+	turn_order.sort_custom(func(a, b) -> bool:
+		if a == null:
+			return false
+		if b == null:
+			return true
 		return a.initiative > b.initiative
 	)
 	current_index = -1
 	round_index = 1
 
-func start_first_turn() -> BattleUnit:
+func start_first_turn():
 	if not has_alive_units():
 		return null
 
@@ -23,20 +27,20 @@ func start_first_turn() -> BattleUnit:
 
 	return turn_order[current_index]
 
-func get_current_unit() -> BattleUnit:
+func get_current_unit():
 	if turn_order.is_empty():
 		return null
 
 	if current_index < 0 or current_index >= turn_order.size():
 		return null
 
-	var unit: BattleUnit = turn_order[current_index]
+	var unit = turn_order[current_index]
 	if unit == null or not unit.is_alive:
 		return null
 
 	return unit
 
-func advance_turn() -> BattleUnit:
+func advance_turn():
 	if not has_alive_units():
 		return null
 
@@ -49,7 +53,6 @@ func advance_turn() -> BattleUnit:
 	if next_index == -1:
 		return null
 
-	# 如果从后面绕回前面，也算新一轮
 	if current_index != -1 and next_index <= current_index:
 		if not (current_index == turn_order.size() - 1 and next_index == 0):
 			round_index += 1
@@ -69,7 +72,7 @@ func _find_next_alive_index(start_index: int) -> int:
 
 	for offset in range(turn_order.size()):
 		var idx: int = (start_index + offset) % turn_order.size()
-		var unit: BattleUnit = turn_order[idx]
+		var unit = turn_order[idx]
 		if unit != null and unit.is_alive:
 			return idx
 
@@ -78,7 +81,7 @@ func _find_next_alive_index(start_index: int) -> int:
 func get_turn_order_debug_text() -> String:
 	var parts: Array[String] = []
 	for i in range(turn_order.size()):
-		var unit: BattleUnit = turn_order[i]
+		var unit = turn_order[i]
 		if unit == null:
 			continue
 

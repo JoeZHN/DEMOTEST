@@ -8,7 +8,7 @@ class_name SkillBar
 @onready var skill_button_3: Button = $CenterContainer/HBoxContainer/SkillButton3
 @onready var end_turn_button_large: Button = $CenterContainer/HBoxContainer/EndTurnButtonLarge
 
-func refresh_for_unit(unit: BattleUnit) -> void:
+func refresh_for_unit(unit) -> void:
 	if unit == null:
 		current_unit_label.text = "No Unit"
 
@@ -40,7 +40,7 @@ func refresh_for_unit(unit: BattleUnit) -> void:
 	_set_skill_button(skill_button_2, skill_list, 1, unit)
 	_set_skill_button(skill_button_3, skill_list, 2, unit)
 
-func _set_skill_button(button: Button, skill_list: Array[SkillBase], index: int, unit: BattleUnit) -> void:
+func _set_skill_button(button: Button, skill_list: Array[SkillBase], index: int, unit) -> void:
 	var skill: SkillBase = null
 	if index >= 0 and index < skill_list.size():
 		skill = skill_list[index]

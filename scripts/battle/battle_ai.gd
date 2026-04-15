@@ -1,7 +1,7 @@
 extends RefCounted
 class_name BattleAI
 
-static func get_attack_range_for_unit(unit: BattleUnit) -> int:
+static func get_attack_range_for_unit(unit) -> int:
 	if unit == null:
 		return 1
 
@@ -10,8 +10,8 @@ static func get_attack_range_for_unit(unit: BattleUnit) -> int:
 
 	return 1
 
-static func find_nearest_player_unit(enemy_unit: BattleUnit, units: Array[BattleUnit], grid_manager: GridManager) -> BattleUnit:
-	var nearest_unit: BattleUnit = null
+static func find_nearest_player_unit(enemy_unit, units: Array, grid_manager: GridManager):
+	var nearest_unit = null
 	var nearest_distance: int = 999999
 
 	for unit in units:
@@ -29,7 +29,7 @@ static func find_nearest_player_unit(enemy_unit: BattleUnit, units: Array[Battle
 
 	return nearest_unit
 
-static func can_attack_target(attacker: BattleUnit, target: BattleUnit, grid_manager: GridManager) -> bool:
+static func can_attack_target(attacker, target, grid_manager: GridManager) -> bool:
 	if attacker == null or target == null:
 		return false
 	if not attacker.is_alive or not target.is_alive:
@@ -40,9 +40,9 @@ static func can_attack_target(attacker: BattleUnit, target: BattleUnit, grid_man
 	return distance > 0 and distance <= attack_range
 
 static func find_best_move_cell_toward_target(
-	enemy_unit: BattleUnit,
-	target_unit: BattleUnit,
-	units: Array[BattleUnit],
+	enemy_unit,
+	target_unit,
+	units: Array,
 	grid_manager: GridManager
 ) -> Vector2i:
 	if enemy_unit == null or target_unit == null:
@@ -57,7 +57,7 @@ static func find_best_move_cell_toward_target(
 	var best_distance: int = grid_manager.get_manhattan_distance(enemy_unit.grid_position, target_unit.grid_position)
 
 	for cell in candidate_cells:
-		var occupant: BattleUnit = grid_manager.get_unit_at_grid(units, cell)
+		var occupant = grid_manager.get_unit_at_grid(units, cell)
 		if occupant != null and occupant != enemy_unit:
 			continue
 
@@ -67,8 +67,8 @@ static func find_best_move_cell_toward_target(
 			best_cell = cell
 
 	return best_cell
-	
-static func get_priority_target(enemy_unit: BattleUnit, units: Array[BattleUnit], grid_manager: GridManager) -> BattleUnit:
+
+static func get_priority_target(enemy_unit, units: Array, grid_manager: GridManager):
 	if enemy_unit == null:
 		return null
 

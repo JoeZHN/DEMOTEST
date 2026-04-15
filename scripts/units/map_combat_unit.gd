@@ -9,6 +9,8 @@ class_name MapCombatUnit
 
 var grid_position: Vector2i = Vector2i.ZERO
 var is_alive: bool = true
+
+# 探索态沿用的移动开关，兼容你当前 frontier_outpost.gd 里的 hu_chao.can_move = false/true
 var can_move: bool = true
 
 var stats: StatsComponent
@@ -67,6 +69,10 @@ func set_grid_position(new_grid_position: Vector2i) -> void:
 func set_world_position_from_grid(grid_manager: GridManager) -> void:
 	global_position = grid_manager.grid_to_world(grid_position)
 
+func move_to_grid_immediate(target_grid: Vector2i, grid_manager: GridManager) -> void:
+	set_grid_position(target_grid)
+	set_world_position_from_grid(grid_manager)
+
 func get_turn_label() -> String:
 	return "%s (%s, init=%d)" % [display_name, camp, initiative]
 
@@ -75,7 +81,3 @@ func is_archer_unit() -> bool:
 
 func is_melee_unit() -> bool:
 	return not is_archer_unit()
-
-func move_to_grid_immediate(target_grid: Vector2i, grid_manager: GridManager) -> void:
-	set_grid_position(target_grid)
-	set_world_position_from_grid(grid_manager)

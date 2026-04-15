@@ -3,7 +3,6 @@ class_name CombatRuntimeController
 
 signal battle_finished(result: String)
 
-
 @onready var combat_layer: Node2D = $".."
 @onready var units_container: Node2D = $"../CombatUnits"
 @onready var effects_container: Node2D = $"../Effects"
@@ -23,9 +22,9 @@ var battle_state: String = BattleConstants.STATE_INIT
 var battle_id: String = ""
 var battle_name: String = ""
 
-var all_units: Array[MapCombatUnit] = []
+var all_units: Array = []
 var turn_manager: TurnManager
-var current_unit: MapCombatUnit = null
+var current_unit = null
 var input_mode: String = "idle" # idle / player_move / player_attack / player_skill / enemy_wait
 var battle_ai: BattleAI = BattleAI.new()
 var selected_skill: SkillBase = null
@@ -58,7 +57,6 @@ func initialize_runtime(runtime_data: Dictionary) -> void:
 	_start_first_turn()
 	_refresh_runtime_ui()
 
-
 func _spawn_runtime_units(runtime_data: Dictionary) -> void:
 	all_units.clear()
 
@@ -86,7 +84,7 @@ func _register_runtime_unit(unit: MapCombatUnit) -> void:
 	all_units.append(unit)
 
 func _start_first_turn() -> void:
-	var unit := turn_manager.start_first_turn()
+	var unit = turn_manager.start_first_turn()
 	if unit == null:
 		return
 
@@ -97,7 +95,7 @@ func _advance_turn_for_debug() -> void:
 	if battle_state != BattleConstants.STATE_RUNNING:
 		return
 
-	var unit := turn_manager.advance_turn()
+	var unit = turn_manager.advance_turn()
 	if unit == null:
 		return
 
@@ -112,12 +110,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		var clicked_cell: Vector2i = _get_mouse_grid_position()
 
-		var clicked_unit: BattleUnit = _get_alive_unit_at_cell(clicked_cell)
+		var clicked_unit = _get_alive_unit_at_cell(clicked_cell)
 		if clicked_unit != null:
 			unit_info_panel.show_unit_info(clicked_unit)
 
 			if input_mode == "player_attack":
-				if clicked_unit.camp != current_unit.camp:
+				if current_unit != null and clicked_unit.camp != current_unit.camp:
 					_try_attack_current_unit_to(clicked_cell)
 				return
 
@@ -168,17 +166,16 @@ func _show_current_unit_move_range() -> void:
 		current_unit.stats.move_range
 	)
 
-	# 排除被单位占用的格子，但保留自己当前格
 	var filtered_cells: Array[Vector2i] = []
 	for cell in move_cells:
-		var occupant := grid_manager.get_unit_at_grid(all_units, cell)
+		var occupant = grid_manager.get_unit_at_grid(all_units, cell)
 		if occupant == null or occupant == current_unit:
 			filtered_cells.append(cell)
 
 	tile_overlay.set_move_cells(filtered_cells)
 	tile_overlay.set_attack_cells([])
 	tile_overlay.set_selected_cell(current_unit.grid_position)
-	
+
 func _show_current_unit_attack_range() -> void:
 	if current_unit == null:
 		tile_overlay.clear_all()
@@ -196,7 +193,7 @@ func _show_current_unit_attack_range() -> void:
 	tile_overlay.set_move_cells([])
 	tile_overlay.set_attack_cells(attack_cells)
 	tile_overlay.set_selected_cell(current_unit.grid_position)
-	
+
 func _show_selected_skill_range() -> void:
 	if current_unit == null or selected_skill == null:
 		tile_overlay.clear_all()
@@ -210,7 +207,7 @@ func _show_selected_skill_range() -> void:
 	tile_overlay.set_move_cells([])
 	tile_overlay.set_attack_cells(skill_cells)
 	tile_overlay.set_selected_cell(current_unit.grid_position)
-	
+
 func _try_move_current_unit_to(target_cell: Vector2i) -> void:
 	if current_unit == null:
 		return
@@ -232,12 +229,12 @@ func _try_move_current_unit_to(target_cell: Vector2i) -> void:
 	if target_cell not in move_cells:
 		return
 
-	var occupant := grid_manager.get_unit_at_grid(all_units, target_cell)
+	var occupant = grid_manager.get_unit_at_grid(all_units, target_cell)
 	if occupant != null and occupant != current_unit:
 		return
 
 	if _will_disengage(current_unit, target_cell):
-		var engaged_target: BattleUnit = current_unit.engagement.engaged_with
+		var engaged_target = current_unit.engagement.engaged_with
 		_apply_opportunity_attack(engaged_target, current_unit)
 
 		if not current_unit.is_alive or battle_state != BattleConstants.STATE_RUNNING:
@@ -248,26 +245,27 @@ func _try_move_current_unit_to(target_cell: Vector2i) -> void:
 		current_unit.engagement.clear_engagement()
 		if engaged_target != null and engaged_target.engagement != null and engaged_target.engagement.engaged_with == current_unit:
 			engaged_target.engagement.clear_engagement()
-	
+
 	current_unit.move_to_grid_immediate(target_cell, grid_manager)
 	current_unit.action.mark_moved()
 
 	unit_info_panel.show_unit_info(current_unit)
 	bottom_skill_bar.refresh_for_unit(current_unit)
 	_show_current_unit_move_range()
-	
+
 func _get_mouse_grid_position() -> Vector2i:
 	return grid_manager.world_to_grid(combat_layer.get_global_mouse_position())
 
-func _get_alive_unit_at_cell(cell: Vector2i) -> BattleUnit:
-	var unit: BattleUnit = grid_manager.get_unit_at_grid(all_units, cell)
+func _get_alive_unit_at_cell(cell: Vector2i):
+	var unit = grid_manager.get_unit_at_grid(all_units, cell)
 	if unit == null:
 		return null
 	if not unit.is_alive:
 		return null
 	return unit
+
 func _inspect_clicked_unit(cell: Vector2i) -> bool:
-	var clicked_unit: BattleUnit = _get_alive_unit_at_cell(cell)
+	var clicked_unit = _get_alive_unit_at_cell(cell)
 	if clicked_unit == null:
 		return false
 
@@ -290,7 +288,7 @@ func _on_attack_button_pressed() -> void:
 
 	input_mode = "player_attack"
 	_show_current_unit_attack_range()
-	
+
 func _on_skill_button_pressed(index: int) -> void:
 	if current_unit == null:
 		return
@@ -317,12 +315,13 @@ func _on_skill_button_pressed(index: int) -> void:
 
 	input_mode = "player_skill"
 	_show_selected_skill_range()
-	
+
 func _on_end_turn_button_pressed() -> void:
 	if current_unit == null:
 		return
 
 	_advance_turn_for_debug()
+
 func _try_attack_current_unit_to(target_cell: Vector2i) -> void:
 	if current_unit == null:
 		return
@@ -332,7 +331,7 @@ func _try_attack_current_unit_to(target_cell: Vector2i) -> void:
 
 	if not current_unit.can_attack():
 		return
-	
+
 	if current_unit.is_archer_unit() and not _can_unit_use_ranged_attack(current_unit):
 		return
 
@@ -344,7 +343,7 @@ func _try_attack_current_unit_to(target_cell: Vector2i) -> void:
 	if distance <= 0 or distance > attack_range:
 		return
 
-	var target_unit := grid_manager.get_unit_at_grid(all_units, target_cell)
+	var target_unit = grid_manager.get_unit_at_grid(all_units, target_cell)
 	if target_unit == null:
 		return
 
@@ -376,7 +375,7 @@ func _try_attack_current_unit_to(target_cell: Vector2i) -> void:
 	bottom_skill_bar.refresh_for_unit(current_unit)
 	_show_current_unit_move_range()
 	_refresh_runtime_ui()
-	
+
 func _try_use_selected_skill(target_cell: Vector2i) -> void:
 	if current_unit == null:
 		return
@@ -404,7 +403,6 @@ func _try_use_selected_skill(target_cell: Vector2i) -> void:
 	_show_current_unit_move_range()
 	_refresh_runtime_ui()
 
-
 func _run_enemy_turn() -> void:
 	if current_unit == null:
 		return
@@ -418,7 +416,7 @@ func _run_enemy_turn() -> void:
 
 	await get_tree().create_timer(0.25).timeout
 
-	var target_unit: BattleUnit = battle_ai.find_nearest_player_unit(current_unit, all_units, grid_manager)
+	var target_unit = battle_ai.get_priority_target(current_unit, all_units, grid_manager)
 	if target_unit == null:
 		_finish_enemy_turn()
 		return
@@ -458,7 +456,7 @@ func _run_enemy_turn() -> void:
 		return
 
 	_finish_enemy_turn()
-	
+
 func _enemy_try_move(target_cell: Vector2i) -> void:
 	if current_unit == null:
 		return
@@ -467,12 +465,12 @@ func _enemy_try_move(target_cell: Vector2i) -> void:
 	if not grid_manager.is_in_bounds(target_cell):
 		return
 
-	var occupant: BattleUnit = grid_manager.get_unit_at_grid(all_units, target_cell)
+	var occupant = grid_manager.get_unit_at_grid(all_units, target_cell)
 	if occupant != null and occupant != current_unit:
 		return
-	
+
 	if _will_disengage(current_unit, target_cell):
-		var engaged_target: BattleUnit = current_unit.engagement.engaged_with
+		var engaged_target = current_unit.engagement.engaged_with
 		_apply_opportunity_attack(engaged_target, current_unit)
 
 		if not current_unit.is_alive or battle_state != BattleConstants.STATE_RUNNING:
@@ -483,13 +481,13 @@ func _enemy_try_move(target_cell: Vector2i) -> void:
 		if engaged_target != null and engaged_target.engagement != null and engaged_target.engagement.engaged_with == current_unit:
 			engaged_target.engagement.clear_engagement()
 
-	current_unit.set_grid_position(target_cell)
-	current_unit.set_world_position_from_grid(grid_manager)
+	current_unit.move_to_grid_immediate(target_cell, grid_manager)
 	current_unit.action.mark_moved()
 
 	unit_info_panel.show_unit_info(current_unit)
 	_refresh_runtime_ui()
-func _enemy_try_attack(target_unit: BattleUnit) -> void:
+
+func _enemy_try_attack(target_unit) -> void:
 	if current_unit == null or target_unit == null:
 		return
 	if not current_unit.is_alive or not target_unit.is_alive:
@@ -522,11 +520,13 @@ func _enemy_try_attack(target_unit: BattleUnit) -> void:
 
 	await get_tree().create_timer(0.2).timeout
 	_finish_enemy_turn()
+
 func _finish_enemy_turn() -> void:
 	if battle_state != BattleConstants.STATE_RUNNING:
 		return
 
 	_advance_turn_for_debug()
+
 func _check_battle_result() -> String:
 	var alive_players: int = 0
 	var alive_enemies: int = 0
@@ -549,6 +549,7 @@ func _check_battle_result() -> String:
 		return "enemy_win"
 
 	return ""
+
 func _apply_battle_result(result: String) -> void:
 	battle_state = BattleConstants.STATE_FINISHED
 	input_mode = "idle"
@@ -560,7 +561,7 @@ func _apply_battle_result(result: String) -> void:
 func _is_adjacent(a: Vector2i, b: Vector2i) -> bool:
 	return grid_manager.get_manhattan_distance(a, b) == 1
 
-func _create_engagement(unit_a: BattleUnit, unit_b: BattleUnit) -> void:
+func _create_engagement(unit_a, unit_b) -> void:
 	if unit_a == null or unit_b == null:
 		return
 	if not unit_a.is_alive or not unit_b.is_alive:
@@ -570,7 +571,8 @@ func _create_engagement(unit_a: BattleUnit, unit_b: BattleUnit) -> void:
 	unit_b.engagement.engage(unit_a)
 
 	unit_info_panel.show_unit_info(unit_a)
-func _clear_engagement_if_needed(unit: BattleUnit) -> void:
+
+func _clear_engagement_if_needed(unit) -> void:
 	if unit == null:
 		return
 	if unit.engagement == null:
@@ -580,14 +582,15 @@ func _clear_engagement_if_needed(unit: BattleUnit) -> void:
 		unit.engagement.clear_engagement()
 		return
 
-	var other: BattleUnit = unit.engagement.engaged_with
+	var other = unit.engagement.engaged_with
 	if other == null or not other.is_alive:
 		unit.engagement.clear_engagement()
 		return
 
 	if not _is_adjacent(unit.grid_position, other.grid_position):
 		unit.engagement.clear_engagement()
-func _can_unit_use_ranged_attack(unit: BattleUnit) -> bool:
+
+func _can_unit_use_ranged_attack(unit) -> bool:
 	if unit == null:
 		return false
 
@@ -598,7 +601,8 @@ func _can_unit_use_ranged_attack(unit: BattleUnit) -> bool:
 		return false
 
 	return true
-func _will_disengage(unit: BattleUnit, target_cell: Vector2i) -> bool:
+
+func _will_disengage(unit, target_cell: Vector2i) -> bool:
 	if unit == null:
 		return false
 	if unit.engagement == null:
@@ -606,7 +610,7 @@ func _will_disengage(unit: BattleUnit, target_cell: Vector2i) -> bool:
 	if not unit.engagement.has_valid_target():
 		return false
 
-	var engaged_target: BattleUnit = unit.engagement.engaged_with
+	var engaged_target = unit.engagement.engaged_with
 	if engaged_target == null or not engaged_target.is_alive:
 		return false
 
@@ -614,7 +618,8 @@ func _will_disengage(unit: BattleUnit, target_cell: Vector2i) -> bool:
 		return false
 
 	return not _is_adjacent(target_cell, engaged_target.grid_position)
-func _apply_opportunity_attack(attacker: BattleUnit, target: BattleUnit) -> void:
+
+func _apply_opportunity_attack(attacker, target) -> void:
 	if attacker == null or target == null:
 		return
 	if not attacker.is_alive or not target.is_alive:
@@ -633,9 +638,9 @@ func _apply_opportunity_attack(attacker: BattleUnit, target: BattleUnit) -> void
 	var result: String = _check_battle_result()
 	if result != "":
 		_apply_battle_result(result)
-		
+
 func _refresh_runtime_ui() -> void:
-	var unit := turn_manager.get_current_unit()
+	var unit = turn_manager.get_current_unit()
 	if unit != null:
 		bottom_skill_bar.refresh_for_unit(unit)
 

@@ -3,7 +3,7 @@ class_name UnitInfoPanel
 
 @onready var info_label: Label = $InfoLabel
 
-func show_unit_info(unit: BattleUnit) -> void:
+func show_unit_info(unit) -> void:
 	if unit == null:
 		info_label.text = "No Unit"
 		return

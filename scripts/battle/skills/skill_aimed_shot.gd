@@ -7,7 +7,7 @@ func _init() -> void:
 	range = 3
 	target_type = "enemy"
 
-func can_use(user: BattleUnit, controller: CombatRuntimeController) -> bool:
+func can_use(user, controller) -> bool:
 	if not super.can_use(user, controller):
 		return false
 
@@ -16,11 +16,11 @@ func can_use(user: BattleUnit, controller: CombatRuntimeController) -> bool:
 
 	return true
 
-func execute(user: BattleUnit, target_cell: Vector2i, controller: CombatRuntimeController) -> bool:
+func execute(user, target_cell: Vector2i, controller) -> bool:
 	if not can_use(user, controller):
 		return false
 
-	var target_unit: BattleUnit = controller.grid_manager.get_unit_at_grid(controller.all_units, target_cell)
+	var target_unit = controller.grid_manager.get_unit_at_grid(controller.all_units, target_cell)
 	if target_unit == null:
 		return false
 	if not target_unit.is_alive:

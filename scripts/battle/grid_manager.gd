@@ -11,6 +11,13 @@ func setup(grid_data: Dictionary) -> void:
 	rows = int(grid_data.get("rows", 8))
 	cell_size = int(grid_data.get("cell_size", 96))
 
+	if grid_data.has("origin"):
+		var raw_origin = grid_data.get("origin")
+		if raw_origin is Array and raw_origin.size() >= 2:
+			origin = Vector2(float(raw_origin[0]), float(raw_origin[1]))
+		elif raw_origin is Vector2:
+			origin = raw_origin
+
 func is_in_bounds(grid_pos: Vector2i) -> bool:
 	return (
 		grid_pos.x >= 0 and grid_pos.x < cols
@@ -56,7 +63,7 @@ func get_cells_in_attack_range(center: Vector2i, attack_range: int) -> Array[Vec
 
 	return result
 
-func get_unit_at_grid(units: Array[BattleUnit], grid_pos: Vector2i) -> BattleUnit:
+func get_unit_at_grid(units: Array, grid_pos: Vector2i):
 	for unit in units:
 		if unit != null and unit.is_alive and unit.grid_position == grid_pos:
 			return unit
