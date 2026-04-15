@@ -1,16 +1,30 @@
-extends CharacterBody2D
+extends MapCombatUnit
 
 @export var move_speed: float = 120.0
 
-var can_move: bool = true
-
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
+func _ready() -> void:
+	super._ready()
+	velocity = Vector2.ZERO
+	if animated_sprite != null:
+		animated_sprite.stop()
+
 func _physics_process(_delta: float) -> void:
+	# 战斗模式下，探索移动脚本完全停用，避免和战斗控制冲突
+	if GameState.frontier_outpost_mode == "combat":
+		velocity = Vector2.ZERO
+		move_and_slide()
+		if animated_sprite != null:
+			animated_sprite.stop()
+		return
+
+	# 探索模式下，如果剧情/对话禁用移动，也停止动画
 	if not can_move:
 		velocity = Vector2.ZERO
 		move_and_slide()
-		animated_sprite.stop()
+		if animated_sprite != null:
+			animated_sprite.stop()
 		return
 
 	var input_vector := Vector2.ZERO
@@ -30,6 +44,9 @@ func _physics_process(_delta: float) -> void:
 	_update_animation(input_vector)
 
 func _update_animation(input_vector: Vector2) -> void:
+	if animated_sprite == null:
+		return
+
 	if input_vector == Vector2.ZERO:
 		animated_sprite.stop()
 		return
